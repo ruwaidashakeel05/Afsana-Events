@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard - Afsanay Event Atelier</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+/* Navbar */
+        nav {
+            background-color: #502817;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-img {
+            width: 100px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            width: 100px;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: #d5bdaf;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .user-info {
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background-color: #d5bdaf;
+            color: #774936;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background-color: #c9ad9d;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 1.8rem;
+        }
+
+        .add-event-btn {
+            background-color: #774936;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .add-event-btn:hover {
+            background-color: #5a3628;
+        }
+
+        /* Events Grid */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .event-title {
+            font-size: 1.2rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .edit-btn, .delete-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0.3rem;
+        }
+
+        .edit-btn {
+            color: #774936;
+        }
+
+        .delete-btn {
+            color: #d9534f;
+        }
+
+        .event-info {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .event-info p {
+            margin-bottom: 0.5rem;
+        }
+
+        .event-info strong {
+            color: #333;
+        }
+
+        .event-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-confirmed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-completed {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            background-color: #774936;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.4rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.3rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: #555;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #774936;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-primary {
+            flex: 1;
+            background-color: #774936;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a3628;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background-color: #e0e0e0;
+            color: #333;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d0d0d0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #888;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #888;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #774936;
+            border-bottom-color: #774936;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .review-btn {
+            background-color: #d5bdaf;
+            color: #774936;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .review-btn:hover {
+            background-color: #c9ad9d;
+        }
+
+        .staff-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .staff-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .staff-card h3 {
+            color: #333;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .staff-card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .rating-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .star-btn {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #ddd;
+        }
+
+        .star-btn.active {
+            color: #f39c12;
+        }
+
+                /* Footer */
+        footer {
+            background-color: #d5bdaf;
+            color: white;
+            padding: 3rem 6rem 1.5rem 4rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-logo {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #d5bdaf;
+        }
+
+        .footer-brand {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #d5bdaf;
+        }
+
+        .footer-address {
+            color: #774936;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .footer-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-center h3 {
+            color: #774936;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #774936;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: #d5bdaf;
+        }
+
+        .footer-right {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .footer-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #d5bdaf 0%, #d5bdaf 100%);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .footer-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(213, 189, 175, 0.3);
+            color: #774936;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo-section">
+                <img src="images/logo1.png" alt="Logo" class="logo-img">
+                <img src="images/logo-text.png" alt="Text" class="logo-text">
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div class="nav-right">
+            <div class="user-info">Welcome, <strong>Customer Name</strong></div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="header">
+            <h1>My Dashboard</h1>
+            <button class="add-event-btn" onclick="openModal()">+ Add New Event</button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('events')">My Events</button>
+            <button class="tab" onclick="switchTab('history')">Event History</button>
+            <button class="tab" onclick="switchTab('reviews')">Review Staff</button>
+        </div>
+
+        <!-- My Events Tab -->
+        <div id="eventsTab" class="tab-content active">
+            <!-- Events Grid -->
+            <div class="events-grid" id="eventsGrid">
+                <!-- Events will be dynamically loaded here -->
+            </div>
+
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <p>No events yet</p>
+                <button class="add-event-btn" onclick="openModal()">Create Your First Event</button>
+            </div>
+        </div>
+
+        <!-- Event History Tab -->
+        <div id="historyTab" class="tab-content">
+            <div class="events-grid" id="historyGrid">
+                <!-- Past events will be loaded here -->
+            </div>
+            <div class="empty-state" id="emptyHistory" style="display: none;">
+                <p>No event history</p>
+            </div>
+        </div>
+
+        <!-- Review Staff Tab -->
+        <div id="reviewsTab" class="tab-content">
+            <h2 style="margin-bottom: 1rem; color: #333;">Rate Our Staff</h2>
+            <div class="staff-list" id="staffList">
+                <!-- Staff cards will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Event Modal -->
+    <div class="modal" id="eventModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Event</h2>
+            </div>
+            <div class="modal-body">
+                <form id="eventForm">
+                    <input type="hidden" id="eventId" value="">
+                    
+                    <div class="form-group">
+                        <label for="eventName">Event Name</label>
+                        <input type="text" id="eventName" name="eventName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventType">Event Type</label>
+                        <select id="eventType" name="eventType" required>
+                            <option value="">Select type</option>
+                            <option value="wedding">Wedding</option>
+                            <option value="birthday">Birthday</option>
+                            <option value="corporate">Corporate Event</option>
+                            <option value="conference">Conference</option>
+                            <option value="party">Party</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventDate">Event Date</label>
+                        <input type="date" id="eventDate" name="eventDate" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventTime">Event Time</label>
+                        <input type="time" id="eventTime" name="eventTime" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventLocation">Location</label>
+                        <input type="text" id="eventLocation" name="eventLocation" placeholder="e.g., Grand Ballroom, Hotel Name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventAddress">Full Address</label>
+                        <textarea id="eventAddress" name="eventAddress" placeholder="Enter complete address" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="guestCount">Expected Guests</label>
+                        <input type="number" id="guestCount" name="guestCount" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eventDescription">Event Description</label>
+                        <textarea id="eventDescription" name="eventDescription" placeholder="Describe your event requirements..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn-primary">Save Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Staff Modal -->
+    <div class="modal" id="reviewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="reviewModalTitle">Review Staff</h2>
+            </div>
+            <div class="modal-body">
+                <form id="reviewForm">
+                    <input type="hidden" id="reviewStaffId">
+                    <div class="form-group">
+                        <label>Rating</label>
+                        <div class="rating-input" id="ratingStars">
+                            <button type="button" class="star-btn" data-rating="1">⭐</button>
+                            <button type="button" class="star-btn" data-rating="2">⭐</button>
+                            <button type="button" class="star-btn" data-rating="3">⭐</button>
+                            <button type="button" class="star-btn" data-rating="4">⭐</button>
+                            <button type="button" class="star-btn" data-rating="5">⭐</button>
+                        </div>
+                        <input type="hidden" id="ratingValue" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewComment">Your Review</label>
+                        <textarea id="reviewComment" name="reviewComment" placeholder="Share your experience..." required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('reviewModal')">Cancel</button>
+                        <button type="submit" class="btn-primary">Submit Review</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <div class="footer-logo-section">
+                    <img src="images/logoOrg.png" alt="Logo" class="footer-logo">
+                </div>
+                <div class="footer-address">
+                    <p><strong>Address:</strong></p>
+                    <p>123 Main Street, F-10 Markaz</p>
+                    <p>Islamabad, Pakistan</p>
+                    <p style="margin-top: 1rem;"><strong>Phone:</strong> +92 300 1234567</p>
+                    <p><strong>Email:</strong> info@afsanayevents.com</p>
+                </div>
+            </div>
+
+            <div class="footer-center">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="home.html">Home</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="login.html">Login</a>
+                </div>
+            </div>
+
+            <div class="footer-right">
+                <div class="footer-image">
+                    <img src="images/ambiance1.jpg" alt="Events">
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Afsanay Event Atelier by ARK. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample events data (will come from C++ backend)
+        let events = [
+            {
+                id: 1,
+                name: "Wedding Ceremony",
+                type: "wedding",
+                date: "2024-12-15",
+                time: "18:00",
+                location: "Grand Ballroom",
+                address: "123 Main Street, Islamabad",
+                guests: 250,
+                description: "Traditional wedding ceremony with dinner",
+                status: "pending"
+            },
+            {
+                id: 2,
+                name: "Birthday Party",
+                type: "birthday",
+                date: "2024-12-20",
+                time: "16:00",
+                location: "Garden Area",
+                address: "456 Park Avenue, Islamabad",
+                guests: 50,
+                description: "25th birthday celebration",
+                status: "confirmed"
+            }
+        ];
+
+        let eventHistory = [
+            {
+                id: 3,
+                name: "Anniversary Celebration",
+                type: "party",
+                date: "2024-10-10",
+                time: "19:00",
+                location: "Rooftop Restaurant",
+                address: "789 Downtown, Islamabad",
+                guests: 30,
+                description: "10th anniversary party",
+                status: "completed"
+            },
+            {
+                id: 4,
+                name: "Corporate Meeting",
+                type: "corporate",
+                date: "2024-09-15",
+                time: "14:00",
+                location: "Conference Hall",
+                address: "Corporate Plaza, Islamabad",
+                guests: 100,
+                description: "Annual corporate meeting",
+                status: "completed"
+            }
+        ];
+
+        let staffMembers = [
+            { id: 1, name: "Ali Khan", role: "Caterer", description: "Specializes in traditional and modern cuisine" },
+            { id: 2, name: "Sara Ali", role: "Decorator", description: "Expert in event decoration and setup" },
+            { id: 3, name: "Bilal Hassan", role: "Photographer", description: "Professional event photography" },
+            { id: 4, name: "Fatima Noor", role: "Sound Technician", description: "Audio and sound system specialist" }
+        ];
+
+        let selectedRating = 0;
+
+        // Load events on page load
+        function loadEvents() {
+            const grid = document.getElementById('eventsGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (events.length === 0) {
+                grid.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            emptyState.style.display = 'none';
+
+            grid.innerHTML = events.map(event => `
+                <div class="event-card">
+                    <div class="event-header">
+                        <div class="event-title">${event.name}</div>
+                        <div class="event-actions">
+                            <button class="edit-btn" onclick="editEvent(${event.id})" title="Edit">✏️</button>
+                            <button class="delete-btn" onclick="deleteEvent(${event.id})" title="Delete">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="event-info">
+                        <p><strong>Type:</strong> ${event.type.charAt(0).toUpperCase() + event.type.slice(1)}</p>
+                        <p><strong>Date:</strong> ${formatDate(event.date)}</p>
+                        <p><strong>Time:</strong> ${formatTime(event.time)}</p>
+                        <p><strong>Location:</strong> ${event.location}</p>
+                        <p><strong>Address:</strong> ${event.address}</p>
+                        <p><strong>Guests:</strong> ${event.guests}</p>
+                        ${event.description ? `<p><strong>Details:</strong> ${event.description}</p>` : ''}
+                        <span class="event-status status-${event.status}">${event.status.charAt(0).toUpperCase() + event.status.slice(1)}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadEventHistory() {
+            const grid = document.getElementById('historyGrid');
+            const emptyHistory = document.getElementById('emptyHistory');
+
+            if (eventHistory.length === 0) {
+                grid.style.display = 'none';
+                emptyHistory.style.display = 'block';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            emptyHistory.style.display = 'none';
+
+            grid.innerHTML = eventHistory.map(event => `
+                <div class="event-card">
+                    <div class="event-header">
+                        <div class="event-title">${event.name}</div>
+                    </div>
+                    <div class="event-info">
+                        <p><strong>Type:</strong> ${event.type.charAt(0).toUpperCase() + event.type.slice(1)}</p>
+                        <p><strong>Date:</strong> ${formatDate(event.date)}</p>
+                        <p><strong>Time:</strong> ${formatTime(event.time)}</p>
+                        <p><strong>Location:</strong> ${event.location}</p>
+                        <p><strong>Address:</strong> ${event.address}</p>
+                        <p><strong>Guests:</strong> ${event.guests}</p>
+                        ${event.description ? `<p><strong>Details:</strong> ${event.description}</p>` : ''}
+                        <span class="event-status status-${event.status}">${event.status.charAt(0).toUpperCase() + event.status.slice(1)}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadStaffList() {
+            const staffList = document.getElementById('staffList');
+            staffList.innerHTML = staffMembers.map(staff => `
+                <div class="staff-card">
+                    <h3>${staff.name}</h3>
+                    <p><strong>Role:</strong> ${staff.role}</p>
+                    <p>${staff.description}</p>
+                    <button class="review-btn" onclick="openReviewModal(${staff.id}, '${staff.name}')">Write Review</button>
+                </div>
+            `).join('');
+        }
+
+        function switchTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tab + 'Tab').classList.add('active');
+
+            // Load data based on tab
+            if (tab === 'events') loadEvents();
+            if (tab === 'history') loadEventHistory();
+            if (tab === 'reviews') loadStaffList();
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function formatTime(timeStr) {
+            const [hours, minutes] = timeStr.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const formattedHour = hour % 12 || 12;
+            return `${formattedHour}:${minutes} ${ampm}`;
+        }
+
+        function openModal(eventId = null) {
+            const modal = document.getElementById('eventModal');
+            const form = document.getElementById('eventForm');
+            const title = document.getElementById('modalTitle');
+
+            if (eventId) {
+                const event = events.find(e => e.id === eventId);
+                title.textContent = 'Edit Event';
+                document.getElementById('eventId').value = event.id;
+                document.getElementById('eventName').value = event.name;
+                document.getElementById('eventType').value = event.type;
+                document.getElementById('eventDate').value = event.date;
+                document.getElementById('eventTime').value = event.time;
+                document.getElementById('eventLocation').value = event.location;
+                document.getElementById('eventAddress').value = event.address;
+                document.getElementById('guestCount').value = event.guests;
+                document.getElementById('eventDescription').value = event.description || '';
+            } else {
+                title.textContent = 'Add New Event';
+                form.reset();
+                document.getElementById('eventId').value = '';
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('eventModal').classList.remove('active');
+            document.getElementById('eventForm').reset();
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            if (modalId === 'reviewModal') {
+                document.getElementById('reviewForm').reset();
+                selectedRating = 0;
+                document.querySelectorAll('.star-btn').forEach(btn => btn.classList.remove('active'));
+            }
+        }
+
+        function openReviewModal(staffId, staffName) {
+            document.getElementById('reviewModalTitle').textContent = `Review ${staffName}`;
+            document.getElementById('reviewStaffId').value = staffId;
+            document.getElementById('reviewModal').classList.add('active');
+        }
+
+        // Rating stars functionality
+        document.querySelectorAll('.star-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                selectedRating = parseInt(this.getAttribute('data-rating'));
+                document.getElementById('ratingValue').value = selectedRating;
+                
+                document.querySelectorAll('.star-btn').forEach(star => {
+                    const starRating = parseInt(star.getAttribute('data-rating'));
+                    if (starRating <= selectedRating) {
+                        star.classList.add('active');
+                    } else {
+                        star.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        function editEvent(eventId) {
+            openModal(eventId);
+        }
+
+        function deleteEvent(eventId) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                // Send delete request to C++ backend
+                console.log('Delete event:', eventId);
+                
+                // Example API call:
+                // fetch(`/api/events/${eventId}`, { method: 'DELETE' })
+                
+                events = events.filter(e => e.id !== eventId);
+                loadEvents();
+            }
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Send logout request to backend
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Form submission
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = {
+                id: document.getElementById('eventId').value || Date.now(),
+                name: document.getElementById('eventName').value,
+                type: document.getElementById('eventType').value,
+                date: document.getElementById('eventDate').value,
+                time: document.getElementById('eventTime').value,
+                location: document.getElementById('eventLocation').value,
+                address: document.getElementById('eventAddress').value,
+                guests: document.getElementById('guestCount').value,
+                description: document.getElementById('eventDescription').value,
+                status: 'pending'
+            };
+
+            // Send to C++ backend
+            console.log('Event Data:', formData);
+
+            // Example API call:
+            // const method = formData.id ? 'PUT' : 'POST';
+            // fetch('/api/events', {
+            //     method: method,
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(formData)
+            // })
+
+            if (document.getElementById('eventId').value) {
+                // Update existing event
+                const index = events.findIndex(e => e.id == formData.id);
+                events[index] = formData;
+            } else {
+                // Add new event
+                events.push(formData);
+            }
+
+            loadEvents();
+            closeModal();
+            alert('Event saved successfully!');
+        });
+
+        // Load events on page load
+        loadEvents();
+    </script>
+</body>
+</html>

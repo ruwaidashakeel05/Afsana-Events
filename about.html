@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Afsanay Event Atelier</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+/* Navbar */
+        nav {
+            background-color: #502817;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-img {
+            width: 100px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            width: 100px;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: #d5bdaf;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            color: #774936;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #9b6545;
+        }
+
+        /* Content Section */
+        .content {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .about-section {
+            background: white;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 3rem;
+        }
+
+        .about-section h2 {
+            color: #774936;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-section p {
+            color: #666;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-member {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .member-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #d5bdaf;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #774936;
+        }
+
+        .team-member h3 {
+            color: #774936;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-member p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* Values Section */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .value-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .value-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .value-card h3 {
+            color: #774936;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .value-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #d5bdaf;
+            color: white;
+            padding: 3rem 6rem 1.5rem 4rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-logo {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #d5bdaf;
+        }
+
+        .footer-brand {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #d5bdaf;
+        }
+
+        .footer-address {
+            color: #774936;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .footer-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-center h3 {
+            color: #774936;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #774936;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: #d5bdaf;
+        }
+
+        .footer-right {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .footer-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #d5bdaf 0%, #d5bdaf 100%);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .footer-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(213, 189, 175, 0.3);
+            color: #774936;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo-section">
+                <img src="images/logo1.png" alt="Logo" class="logo-img">
+                <img src="images/logo-text.png" alt="Text" class="logo-text">
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact Us</a>
+                <a href="login.html" class="login-btn">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>About Us</h1>
+        <p>Creating memorable events since 2015</p>
+    </section>
+
+    <!-- Content -->
+    <div class="content">
+        <!-- Our Story -->
+        <div class="about-section">
+            <h2>Our Story</h2>
+            <p>Afsanay Event Atelier by ARK was founded in 2015 with a vision to transform ordinary events into extraordinary experiences. What started as a small team of passionate event planners has grown into one of the most trusted event management companies in the region.</p>
+            <p>We believe that every event tells a story, and our mission is to help you tell yours in the most beautiful and memorable way possible. With years of experience and hundreds of successful events, we continue to set new standards in event management excellence.</p>
+        </div>
+
+        <!-- Our Values -->
+        <div class="about-section">
+            <h2>Our Values</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">✨</div>
+                    <h3>Excellence</h3>
+                    <p>We strive for perfection in every detail, ensuring your event exceeds expectations.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">🤝</div>
+                    <h3>Trust</h3>
+                    <p>Building lasting relationships through transparency, reliability, and commitment.</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-icon">💡</div>
+                    <h3>Innovation</h3>
+                    <p>Bringing creative and unique ideas to make your events stand out.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Our Team -->
+        <div class="about-section">
+            <h2>Meet Our Team</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-avatar">👨‍💼</div>
+                    <h3>Ali Raza Khan</h3>
+                    <p>Founder & CEO</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">👩‍💼</div>
+                    <h3>Sarah Ahmed</h3>
+                    <p>Head of Operations</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">👨‍🍳</div>
+                    <h3>Hassan Malik</h3>
+                    <p>Chief Catering Officer</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">👩‍🎨</div>
+                    <h3>Fatima Noor</h3>
+                    <p>Creative Director</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mission & Vision -->
+        <div class="about-section">
+            <h2>Our Mission</h2>
+            <p>To deliver exceptional event management services that create lasting memories and exceed client expectations through professionalism, creativity, and attention to detail.</p>
+            
+            <h2 style="margin-top: 2rem;">Our Vision</h2>
+            <p>To be the leading event management company, recognized for setting industry standards and transforming celebrations into unforgettable experiences.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <div class="footer-logo-section">
+                    <img src="images/logoOrg.png" alt="Logo" class="footer-logo">
+                </div>
+                <div class="footer-address">
+                    <p><strong>Address:</strong></p>
+                    <p>123 Main Street, F-10 Markaz</p>
+                    <p>Islamabad, Pakistan</p>
+                    <p style="margin-top: 1rem;"><strong>Phone:</strong> +92 300 1234567</p>
+                    <p><strong>Email:</strong> info@afsanayevents.com</p>
+                </div>
+            </div>
+
+            <div class="footer-center">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="home.html">Home</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="login.html">Login</a>
+                </div>
+            </div>
+
+            <div class="footer-right">
+                <div class="footer-image">
+                    <img src="images/ambiance1.jpg" alt="Events">
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Afsanay Event Atelier by ARK. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

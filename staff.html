@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - Afsanay Event Atelier</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: #502817;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-img {
+            width: 100px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            width: 100px;
+            object-fit: contain;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-links {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: #d5bdaf;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .user-info {
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background-color: #d5bdaf;
+            color: #774936;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background-color: #c9ad9d;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #888;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #774936;
+            border-bottom-color: #774936;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: #774936;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a3628;
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .card-info {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .card-info p {
+            margin-bottom: 0.5rem;
+        }
+
+        .card-info strong {
+            color: #333;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-in-progress {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-unread {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-read {
+            background-color: #e8e8e8;
+            color: #666;
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            background-color: #dc3545;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Action Buttons */
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .btn-complete {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-complete:hover {
+            background-color: #218838;
+        }
+
+        .btn-view {
+            background-color: #774936;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background-color: #5a3628;
+        }
+
+        /* Analytics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #774936;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        /* Reviews */
+        .review-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .review-customer {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .review-rating {
+            color: #f39c12;
+            font-size: 1.1rem;
+        }
+
+        .review-content {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .review-date {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            background-color: #774936;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.4rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.3rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: #555;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #774936;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background-color: #e0e0e0;
+            color: #333;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d0d0d0;
+        }
+
+        .btn-full {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .report-btn {
+            background-color: #d5bdaf;
+            color: #774936;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-left: 1rem;
+        }
+
+        .report-btn:hover {
+            background-color: #c9ad9d;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #d5bdaf;
+            color: white;
+            padding: 3rem 6rem 1.5rem 4rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-logo {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #d5bdaf;
+        }
+
+        .footer-brand {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #d5bdaf;
+        }
+
+        .footer-address {
+            color: #774936;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .footer-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-center h3 {
+            color: #774936;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #774936;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: #d5bdaf;
+        }
+
+        .footer-right {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .footer-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #d5bdaf 0%, #d5bdaf 100%);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .footer-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(213, 189, 175, 0.3);
+            color: #774936;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo-section">
+                <img src="images/logo1.png" alt="Logo" class="logo-img">
+                <img src="images/logo-text.png" alt="Text" class="logo-text">
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div class="nav-right">
+            <div class="user-info">Staff: <strong>Jalal Khan</strong> (Caterer)</div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('tasks')">My Tasks <span class="notification-badge">3</span></button>
+            <button class="tab" onclick="switchTab('notifications')">Notifications <span class="notification-badge">5</span></button>
+            <button class="tab" onclick="switchTab('reviews')">Customer Reviews</button>
+            <button class="tab" onclick="switchTab('analytics')">Performance Analytics</button>
+            <button class="tab" onclick="switchTab('reports')">Reports</button>
+        </div>
+
+        <!-- My Tasks Tab -->
+        <div id="tasksTab" class="tab-content active">
+            <div class="section-header">
+                <h2>Assigned Tasks</h2>
+                <button class="btn-primary" onclick="openNotifySupervisorModal()">Contact Supervisor</button>
+            </div>
+            <div class="cards-grid" id="tasksGrid">
+                <!-- Tasks will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Notifications Tab -->
+        <div id="notificationsTab" class="tab-content">
+            <div class="section-header">
+                <h2>Notifications from Supervisors</h2>
+                <button class="btn-primary" onclick="markAllAsRead()">Mark All as Read</button>
+            </div>
+            <div id="notificationsContainer">
+                <!-- Notifications will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Reviews Tab -->
+        <div id="reviewsTab" class="tab-content">
+            <div class="section-header">
+                <h2>Customer Reviews About Me</h2>
+            </div>
+            <div id="reviewsContainer">
+                <!-- Reviews will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="analyticsTab" class="tab-content">
+            <div class="section-header">
+                <h2>Performance Analytics</h2>
+                <button class="report-btn" onclick="downloadAnalytics()">Download Report</button>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalTasks">24</div>
+                    <div class="stat-label">Total Tasks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completedTasks">18</div>
+                    <div class="stat-label">Completed Tasks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgRating">4.8</div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalReviews">15</div>
+                    <div class="stat-label">Total Reviews</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="margin-bottom: 1rem; color: #333;">Tasks Completion Trend</h3>
+                <div class="chart-placeholder">Chart: Task completion over time</div>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="margin-bottom: 1rem; color: #333;">Rating Distribution</h3>
+                <div class="chart-placeholder">Chart: Rating breakdown (1-5 stars)</div>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reportsTab" class="tab-content">
+            <div class="section-header">
+                <h2>Generate Reports</h2>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 1rem; color: #333;">Performance Report</h3>
+                <p style="color: #666; margin-bottom: 1rem;">Generate a detailed report of your performance, tasks, and customer feedback.</p>
+                <div style="display: flex; gap: 1rem;">
+                    <div style="flex: 1;">
+                        <label>Report Type</label>
+                        <select id="reportType" style="margin-top: 0.5rem;">
+                            <option value="monthly">Monthly Report</option>
+                            <option value="quarterly">Quarterly Report</option>
+                            <option value="yearly">Yearly Report</option>
+                            <option value="custom">Custom Date Range</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label>Format</label>
+                        <select id="reportFormat" style="margin-top: 0.5rem;">
+                            <option value="pdf">PDF</option>
+                            <option value="excel">Excel</option>
+                            <option value="csv">CSV</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="generateReport()" style="margin-top: 1rem; width: 100%;">Generate Report</button>
+            </div>
+
+            <div class="cards-grid" style="margin-top: 2rem;">
+                <div class="card">
+                    <h3 style="margin-bottom: 0.5rem; color: #333;">Recent Reports</h3>
+                    <div class="card-info">
+                        <p><strong>Monthly Report - November 2024</strong></p>
+                        <p style="color: #888; font-size: 0.85rem;">Generated on: 2024-12-01</p>
+                        <button class="btn-small btn-view" style="margin-top: 0.5rem;">Download</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="margin-bottom: 0.5rem; color: #333;">Quarterly Report - Q3 2024</h3>
+                    <div class="card-info">
+                        <p><strong>July - September 2024</strong></p>
+                        <p style="color: #888; font-size: 0.85rem;">Generated on: 2024-10-05</p>
+                        <button class="btn-small btn-view" style="margin-top: 0.5rem;">Download</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Details Modal -->
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Task Details</h2>
+            </div>
+            <div class="modal-body">
+                <div id="taskDetails"></div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('taskModal')">Close</button>
+                    <button type="button" class="btn-full btn-primary" onclick="markTaskComplete()">Mark as Complete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Supervisor Modal -->
+    <div class="modal" id="supervisorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Contact Supervisor</h2>
+            </div>
+            <div class="modal-body">
+                <form id="supervisorForm">
+                    <div class="form-group">
+                        <label for="issueSubject">Subject</label>
+                        <input type="text" id="issueSubject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="issueMessage">Message</label>
+                        <textarea id="issueMessage" placeholder="Describe your problem or question..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="issuePriority">Priority</label>
+                        <select id="issuePriority" required>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('supervisorModal')">Cancel</button>
+                        <button type="submit" class="btn-full btn-primary">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <div class="footer-logo-section">
+                    <img src="images/logoOrg.png" alt="Logo" class="footer-logo">
+                </div>
+                <div class="footer-address">
+                    <p><strong>Address:</strong></p>
+                    <p>123 Main Street, F-10 Markaz</p>
+                    <p>Islamabad, Pakistan</p>
+                    <p style="margin-top: 1rem;"><strong>Phone:</strong> +92 300 1234567</p>
+                    <p><strong>Email:</strong> info@afsanayevents.com</p>
+                </div>
+            </div>
+
+            <div class="footer-center">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="home.html">Home</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="login.html">Login</a>
+                </div>
+            </div>
+
+            <div class="footer-right">
+                <div class="footer-image">
+                    <img src="images/ambiance1.jpg" alt="Events">
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Afsanay Event Atelier by ARK. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample data
+        let tasks = [
+            { id: 1, name: "Setup catering station", event: "Wedding Ceremony", eventDate: "2024-12-15", dueDate: "2024-12-15", status: "pending", description: "Setup main catering station with all equipment", priority: "high" },
+            { id: 2, name: "Food preparation checklist", event: "Birthday Party", eventDate: "2024-12-20", dueDate: "2024-12-19", status: "in-progress", description: "Prepare menu items as per client requirements", priority: "medium" },
+            { id: 3, name: "Final quality check", event: "Corporate Event", eventDate: "2024-12-18", dueDate: "2024-12-18", status: "pending", description: "Ensure all food items meet quality standards", priority: "high" }
+        ];
+
+        let notifications = [
+            { id: 1, subject: "New Task Assigned", message: "You have been assigned a new task for Wedding Ceremony event.", date: "2024-12-02", status: "unread", from: "John Doe" },
+            { id: 2, subject: "Event Date Changed", message: "Birthday Party event has been rescheduled to Dec 20.", date: "2024-12-01", status: "unread", from: "John Doe" },
+            { id: 3, subject: "Important: Quality Standards", message: "Please review the updated quality standards document.", date: "2024-11-30", status: "read", from: "John Doe" },
+            { id: 4, subject: "Team Meeting Tomorrow", message: "Mandatory team meeting at 10 AM in conference room.", date: "2024-11-29", status: "unread", from: "John Doe" },
+            { id: 5, subject: "Great Job!", message: "Excellent work on the last event. Client was very satisfied.", date: "2024-11-28", status: "read", from: "John Doe" }
+        ];
+
+        let reviews = [
+            { id: 1, customer: "Sarah Ahmed", rating: 5, comment: "Excellent food quality and presentation. Very professional service!", date: "2024-11-25", event: "Wedding Ceremony" },
+            { id: 2, customer: "Musaddiq Hussain", rating: 4, comment: "Good service, food was delicious. Slight delay in setup.", date: "2024-11-20", event: "Birthday Party" },
+            { id: 3, customer: "Fatima Noor", rating: 5, comment: "Amazing work! Everything was perfect and on time.", date: "2024-11-18", event: "Corporate Event" }
+        ];
+
+        let currentTaskId = null;
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tab + 'Tab').classList.add('active');
+
+            if (tab === 'tasks') loadTasks();
+            if (tab === 'notifications') loadNotifications();
+            if (tab === 'reviews') loadReviews();
+        }
+
+        function loadTasks() {
+            const grid = document.getElementById('tasksGrid');
+            grid.innerHTML = tasks.map(task => `
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">${task.name}</div>
+                    </div>
+                    <div class="card-info">
+                        <p><strong>Event:</strong> ${task.event}</p>
+                        <p><strong>Event Date:</strong> ${task.eventDate}</p>
+                        <p><strong>Due Date:</strong> ${task.dueDate}</p>
+                        <p><strong>Priority:</strong> ${task.priority.toUpperCase()}</p>
+                        <p><strong>Description:</strong> ${task.description}</p>
+                        <span class="status-badge status-${task.status}">${task.status.replace('-', ' ').toUpperCase()}</span>
+                    </div>
+                    <div class="action-btns">
+                        <button class="btn-small btn-view" onclick="viewTask(${task.id})">View Details</button>
+                        ${task.status !== 'completed' ? `<button class="btn-small btn-complete" onclick="completeTask(${task.id})">Mark Complete</button>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadNotifications() {
+            const container = document.getElementById('notificationsContainer');
+            container.innerHTML = notifications.map(notif => `
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">${notif.subject}</div>
+                            <div style="font-size: 0.85rem; color: #888;">From: ${notif.from}</div>
+                        </div>
+                        <span class="status-badge status-${notif.status}">${notif.status.toUpperCase()}</span>
+                    </div>
+                    <div class="card-info">
+                        <p>${notif.message}</p>
+                        <p style="color: #888; font-size: 0.85rem; margin-top: 0.5rem;">${notif.date}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadReviews() {
+            const container = document.getElementById('reviewsContainer');
+            container.innerHTML = reviews.map(review => `
+                <div class="review-card">
+                    <div class="review-header">
+                        <div>
+                            <div class="review-customer">${review.customer}</div>
+                            <div style="font-size: 0.85rem; color: #888;">${review.event}</div>
+                        </div>
+                        <div class="review-rating">${'⭐'.repeat(review.rating)}</div>
+                    </div>
+                    <div class="review-content">${review.comment}</div>
+                    <div class="review-date">${review.date}</div>
+                </div>
+            `).join('');
+        }
+
+        function viewTask(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            currentTaskId = taskId;
+            document.getElementById('taskDetails').innerHTML = `
+                <div class="card-info">
+                    <p><strong>Task:</strong> ${task.name}</p>
+                    <p><strong>Event:</strong> ${task.event}</p>
+                    <p><strong>Event Date:</strong> ${task.eventDate}</p>
+                    <p><strong>Due Date:</strong> ${task.dueDate}</p>
+                    <p><strong>Priority:</strong> ${task.priority.toUpperCase()}</p>
+                    <p><strong>Status:</strong> ${task.status.replace('-', ' ').toUpperCase()}</p>
+                    <p><strong>Description:</strong> ${task.description}</p>
+                </div>
+            `;
+            document.getElementById('taskModal').classList.add('active');
+        }
+
+        function completeTask(taskId) {
+            if (confirm('Mark this task as complete?')) {
+                const task = tasks.find(t => t.id === taskId);
+                task.status = 'completed';
+                
+                console.log('Complete Task:', { taskId, status: 'completed' });
+                // API call: PUT /api/tasks/{id}
+                
+                loadTasks();
+                alert('Task marked as complete!');
+            }
+        }
+
+        function markTaskComplete() {
+            if (currentTaskId) {
+                completeTask(currentTaskId);
+                closeModal('taskModal');
+            }
+        }
+
+        function markAllAsRead() {
+            notifications.forEach(n => n.status = 'read');
+            
+            console.log('Mark all notifications as read');
+            // API call: PUT /api/notifications/read-all
+            
+            loadNotifications();
+            alert('All notifications marked as read!');
+        }
+
+        function openNotifySupervisorModal() {
+            document.getElementById('supervisorModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function generateReport() {
+            const reportType = document.getElementById('reportType').value;
+            const reportFormat = document.getElementById('reportFormat').value;
+            
+            const reportData = {
+                type: reportType,
+                format: reportFormat,
+                generatedDate: new Date().toISOString()
+            };
+
+            console.log('Generate Report:', reportData);
+            // API call: POST /api/reports/generate
+            
+            alert(`${reportType.charAt(0).toUpperCase() + reportType.slice(1)} report in ${reportFormat.toUpperCase()} format will be generated and downloaded.`);
+        }
+
+        function downloadAnalytics() {
+            console.log('Download Analytics Report');
+            // API call: GET /api/analytics/download
+            alert('Analytics report will be downloaded as PDF.');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Supervisor form submission
+        document.getElementById('supervisorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const messageData = {
+                subject: document.getElementById('issueSubject').value,
+                message: document.getElementById('issueMessage').value,
+                priority: document.getElementById('issuePriority').value,
+                date: new Date().toISOString()
+            };
+
+            console.log('Contact Supervisor:', messageData);
+            // API call: POST /api/supervisor/contact
+
+            closeModal('supervisorModal');
+            alert('Message sent to supervisor successfully!');
+            this.reset();
+        });
+
+        // Initial load
+        loadTasks();
+    </script>
+</body>
+</html>

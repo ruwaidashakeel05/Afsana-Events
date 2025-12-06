@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Afsanay Event Atelier</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+/* Navbar */
+        nav {
+            background-color: #502817;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-img {
+            width: 100px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            width: 100px;
+            object-fit: contain;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-links {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: #d5bdaf;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background-color: #d5bdaf;
+            color: #774936;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background-color: #c9ad9d;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-info h3 {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .stat-info p {
+            color: #774936;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #888;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #774936;
+            border-bottom-color: #774936;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: #774936;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a3628;
+        }
+
+        /* Table */
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #f8f8f8;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            color: #555;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 1rem;
+            border-top: 1px solid #f0f0f0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        tr:hover {
+            background-color: #fafafa;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-confirmed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-completed {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        /* Action Buttons */
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .btn-edit {
+            background-color: #774936;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #5a3628;
+        }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+        .btn-view {
+            background-color: #d5bdaf;
+            color: #774936;
+        }
+
+        .btn-view:hover {
+            background-color: #c9ad9d;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            background-color: #774936;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.4rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.3rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: #555;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #774936;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background-color: #e0e0e0;
+            color: #333;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d0d0d0;
+        }
+
+        .btn-full {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Charts Placeholder */
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #d5bdaf;
+            color: white;
+            padding: 3rem 6rem 1.5rem 4rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-logo {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #d5bdaf;
+        }
+
+        .footer-brand {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #d5bdaf;
+        }
+
+        .footer-address {
+            color: #774936;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .footer-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-center h3 {
+            color: #774936;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #774936;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: #d5bdaf;
+        }
+
+        .footer-right {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .footer-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #d5bdaf 0%, #d5bdaf 100%);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .footer-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(213, 189, 175, 0.3);
+            color: #774936;
+            font-size: 0.9rem;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo-section">
+                <img src="images/logo1.png" alt="Logo" class="logo-img">
+                <img src="images/logo-text.png" alt="Text" class="logo-text">
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+        <div class="nav-right">
+            <div class="user-info">Admin: <strong>System Administrator</strong></div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3>Total Users</h3>
+                    <p id="totalUsers">245</p>
+                </div>
+                <div class="stat-icon">👥</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3>Total Events</h3>
+                    <p id="totalEvents">156</p>
+                </div>
+                <div class="stat-icon">🎉</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3>Active Staff</h3>
+                    <p id="activeStaff">48</p>
+                </div>
+                <div class="stat-icon">👨‍💼</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-info">
+                    <h3>Revenue</h3>
+                    <p id="revenue">$125K</p>
+                </div>
+                <div class="stat-icon">💰</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('users')">User Management</button>
+            <button class="tab" onclick="switchTab('events')">Event Management</button>
+            <button class="tab" onclick="switchTab('staff')">Staff Management</button>
+            <button class="tab" onclick="switchTab('supervisors')">Supervisor Management</button>
+            <button class="tab" onclick="switchTab('analytics')">Analytics</button>
+            <button class="tab" onclick="switchTab('settings')">System Settings</button>
+        </div>
+
+        <!-- User Management Tab -->
+        <div id="usersTab" class="tab-content active">
+            <div class="section-header">
+                <h2>All Users</h2>
+                <button class="btn-primary" onclick="openUserModal()">+ Add New User</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Joined Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Users will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Event Management Tab -->
+        <div id="eventsTab" class="tab-content">
+            <div class="section-header">
+                <h2>All Events</h2>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Event Name</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventsTableBody">
+                        <!-- Events will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Staff Management Tab -->
+        <div id="staffTab" class="tab-content">
+            <div class="section-header">
+                <h2>Staff Members</h2>
+                <button class="btn-primary" onclick="openStaffModal()">+ Add New Staff</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staffTableBody">
+                        <!-- Staff will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Supervisor Management Tab -->
+        <div id="supervisorsTab" class="tab-content">
+            <div class="section-header">
+                <h2>Supervisors</h2>
+                <button class="btn-primary" onclick="openSupervisorModal()">+ Add New Supervisor</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="supervisorsTableBody">
+                        <!-- Supervisors will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="analyticsTab" class="tab-content">
+            <div class="section-header">
+                <h2>System Analytics</h2>
+                <button class="btn-primary" onclick="downloadReport()">Download Report</button>
+            </div>
+            
+            <div class="chart-container">
+                <h3 style="margin-bottom: 1rem; color: #333;">Event Bookings Over Time</h3>
+                <div class="chart-placeholder">Chart: Monthly event bookings</div>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="margin-bottom: 1rem; color: #333;">Revenue Analytics</h3>
+                <div class="chart-placeholder">Chart: Revenue by event type</div>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="margin-bottom: 1rem; color: #333;">Staff Performance</h3>
+                <div class="chart-placeholder">Chart: Staff ratings and task completion</div>
+            </div>
+        </div>
+
+        <!-- System Settings Tab -->
+        <div id="settingsTab" class="tab-content">
+            <div class="section-header">
+                <h2>System Settings</h2>
+            </div>
+            
+            <div class="table-container" style="padding: 2rem;">
+                <h3 style="margin-bottom: 1.5rem; color: #333;">General Settings</h3>
+                <form id="settingsForm">
+                    <div class="form-group">
+                        <label for="companyName">Company Name</label>
+                        <input type="text" id="companyName" value="Afsanay Event Atelier by ARK">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyEmail">Company Email</label>
+                        <input type="email" id="companyEmail" value="info@afsanayevents.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyPhone">Company Phone</label>
+                        <input type="tel" id="companyPhone" value="+92 300 1234567">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyAddress">Company Address</label>
+                        <textarea id="companyAddress">123 Main Street, F-7 Markaz, Islamabad, Pakistan</textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Save Settings</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="userModalTitle">Add New User</h2>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <input type="hidden" id="userId">
+                    <div class="form-group">
+                        <label for="userName">Full Name</label>
+                        <input type="text" id="userName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">Email</label>
+                        <input type="email" id="userEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userPassword">Password</label>
+                        <input type="password" id="userPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="userRole">Role</label>
+                        <select id="userRole" required>
+                            <option value="customer">Customer</option>
+                            <option value="staff">Staff</option>
+                            <option value="supervisor">Supervisor</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="userStatus">Status</label>
+                        <select id="userStatus" required>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('userModal')">Cancel</button>
+                        <button type="submit" class="btn-full btn-primary">Save User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Staff Modal -->
+    <div class="modal" id="staffModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="staffModalTitle">Add New Staff</h2>
+            </div>
+            <div class="modal-body">
+                <form id="staffForm">
+                    <input type="hidden" id="staffId">
+                    <div class="form-group">
+                        <label for="staffName">Full Name</label>
+                        <input type="text" id="staffName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="staffEmail">Email</label>
+                        <input type="email" id="staffEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="staffPassword">Password</label>
+                        <input type="password" id="staffPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="staffRole">Role</label>
+                        <select id="staffRole" required>
+                            <option value="caterer">Caterer</option>
+                            <option value="decorator">Decorator</option>
+                            <option value="photographer">Photographer</option>
+                            <option value="sound_tech">Sound Technician</option>
+                            <option value="coordinator">Event Coordinator</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="staffPhone">Phone</label>
+                        <input type="tel" id="staffPhone" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('staffModal')">Cancel</button>
+                        <button type="submit" class="btn-full btn-primary">Save Staff</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Supervisor Modal -->
+    <div class="modal" id="supervisorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="supervisorModalTitle">Add New Supervisor</h2>
+            </div>
+            <div class="modal-body">
+                <form id="supervisorForm">
+                    <input type="hidden" id="supervisorId">
+                    <div class="form-group">
+                        <label for="supervisorName">Full Name</label>
+                        <input type="text" id="supervisorName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="supervisorEmail">Email</label>
+                        <input type="email" id="supervisorEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="supervisorPassword">Password</label>
+                        <input type="password" id="supervisorPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="supervisorPhone">Phone</label>
+                        <input type="tel" id="supervisorPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="supervisorDepartment">Department</label>
+                        <input type="text" id="supervisorDepartment" placeholder="e.g., Event Planning" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('supervisorModal')">Cancel</button>
+                        <button type="submit" class="btn-full btn-primary">Save Supervisor</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+        <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <div class="footer-logo-section">
+                    <img src="images/logoOrg.png" alt="Logo" class="footer-logo">
+                </div>
+                <div class="footer-address">
+                    <p><strong>Address:</strong></p>
+                    <p>123 Main Street, F-10 Markaz</p>
+                    <p>Islamabad, Pakistan</p>
+                    <p style="margin-top: 1rem;"><strong>Phone:</strong> +92 300 1234567</p>
+                    <p><strong>Email:</strong> info@afsanayevents.com</p>
+                </div>
+            </div>
+
+            <div class="footer-center">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="home.html">Home</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="login.html">Login</a>
+                </div>
+            </div>
+
+            <div class="footer-right">
+                <div class="footer-image">
+                    <img src="images/ambiance1.jpg" alt="Events">
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Afsanay Event Atelier by ARK. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let users = [
+            { id: 1, name: "Ali Ahmed", email: "ali@example.com", role: "customer", status: "active", joinDate: "2024-01-15" },
+            { id: 2, name: "Sara Khan", email: "sara@example.com", role: "customer", status: "active", joinDate: "2024-02-20" },
+            { id: 3, name: "Ahmed Hassan", email: "ahmed@example.com", role: "staff", status: "active", joinDate: "2024-03-10" },
+            { id: 4, name: "John Doe", email: "john@example.com", role: "supervisor", status: "active", joinDate: "2024-01-05" }
+        ];
+
+        let events = [
+            { id: 1, name: "Wedding Ceremony", customer: "Ali Ahmed", date: "2024-12-15", location: "Grand Ballroom", status: "confirmed" },
+            { id: 2, name: "Birthday Party", customer: "Sara Khan", date: "2024-12-20", location: "Garden Area", status: "pending" },
+            { id: 3, name: "Corporate Event", customer: "Bilal Hassan", date: "2024-12-18", location: "Conference Hall", status: "completed" }
+        ];
+
+        let staff = [
+            { id: 1, name: "Ali Khan", role: "Caterer", email: "ali@example.com", phone: "0300-1234567", status: "active" },
+            { id: 2, name: "Sara Ali", role: "Decorator", email: "sara@example.com", phone: "0301-2345678", status: "active" },
+            { id: 3, name: "Bilal Hassan", role: "Photographer", email: "bilal@example.com", phone: "0302-3456789", status: "active" }
+        ];
+
+        let supervisors = [
+            { id: 1, name: "John Doe", email: "john@example.com", phone: "0303-4567890", department: "Event Planning", status: "active" },
+            { id: 2, name: "Jane Smith", email: "jane@example.com", phone: "0304-5678901", department: "Operations", status: "active" }
+        ];
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tab + 'Tab').classList.add('active');
+
+            if (tab === 'users') loadUsers();
+            if (tab === 'events') loadEvents();
+            if (tab === 'staff') loadStaff();
+            if (tab === 'supervisors') loadSupervisors();
+        }
+
+        function loadUsers() {
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role.charAt(0).toUpperCase() + user.role.slice(1)}</td>
+                    <td><span class="status-badge status-${user.status}">${user.status.toUpperCase()}</span></td>
+                    <td>${user.joinDate}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-small btn-edit" onclick="editUser(${user.id})">Edit</button>
+                            <button class="btn-small btn-delete" onclick="deleteUser(${user.id})">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadEvents() {
+            const tbody = document.getElementById('eventsTableBody');
+            tbody.innerHTML = events.map(event => `
+                <tr>
+                    <td>${event.name}</td>
+                    <td>${event.customer}</td>
+                    <td>${event.date}</td>
+                    <td>${event.location}</td>
+                    <td><span class="status-badge status-${event.status}">${event.status.toUpperCase()}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-small btn-view" onclick="viewEvent(${event.id})">View</button>
+                            <button class="btn-small btn-delete" onclick="deleteEvent(${event.id})">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadStaff() {
+            const tbody = document.getElementById('staffTableBody');
+            tbody.innerHTML = staff.map(s => `
+                <tr>
+                    <td>${s.name}</td>
+                    <td>${s.role}</td>
+                    <td>${s.email}</td>
+                    <td>${s.phone}</td>
+                    <td><span class="status-badge status-${s.status}">${s.status.toUpperCase()}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-small btn-edit" onclick="editStaff(${s.id})">Edit</button>
+                            <button class="btn-small btn-delete" onclick="deleteStaff(${s.id})">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadSupervisors() {
+            const tbody = document.getElementById('supervisorsTableBody');
+            tbody.innerHTML = supervisors.map(s => `
+                <tr>
+                    <td>${s.name}</td>
+                    <td>${s.email}</td>
+                    <td>${s.phone}</td>
+                    <td>${s.department}</td>
+                    <td><span class="status-badge status-${s.status}">${s.status.toUpperCase()}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-small btn-edit" onclick="editSupervisor(${s.id})">Edit</button>
+                            <button class="btn-small btn-delete" onclick="deleteSupervisor(${s.id})">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openUserModal(userId = null) {
+            document.getElementById('userModal').classList.add('active');
+            if (userId) {
+                const user = users.find(u => u.id === userId);
+                document.getElementById('userModalTitle').textContent = 'Edit User';
+                document.getElementById('userId').value = user.id;
+                document.getElementById('userName').value = user.name;
+                document.getElementById('userEmail').value = user.email;
+                document.getElementById('userRole').value = user.role;
+                document.getElementById('userStatus').value = user.status;
+            } else {
+                document.getElementById('userModalTitle').textContent = 'Add New User';
+                document.getElementById('userForm').reset();
+            }
+        }
+
+        function openStaffModal(staffId = null) {
+            document.getElementById('staffModal').classList.add('active');
+            if (staffId) {
+                const s = staff.find(st => st.id === staffId);
+                document.getElementById('staffModalTitle').textContent = 'Edit Staff';
+                document.getElementById('staffId').value = s.id;
+                document.getElementById('staffName').value = s.name;
+                document.getElementById('staffEmail').value = s.email;
+                document.getElementById('staffRole').value = s.role.toLowerCase().replace(' ', '_');
+                document.getElementById('staffPhone').value = s.phone;
+            } else {
+                document.getElementById('staffModalTitle').textContent = 'Add New Staff';
+                document.getElementById('staffForm').reset();
+            }
+        }
+
+        function openSupervisorModal(supId = null) {
+            document.getElementById('supervisorModal').classList.add('active');
+            if (supId) {
+                const s = supervisors.find(sup => sup.id === supId);
+                document.getElementById('supervisorModalTitle').textContent = 'Edit Supervisor';
+                document.getElementById('supervisorId').value = s.id;
+                document.getElementById('supervisorName').value = s.name;
+                document.getElementById('supervisorEmail').value = s.email;
+                document.getElementById('supervisorPhone').value = s.phone;
+                document.getElementById('supervisorDepartment').value = s.department;
+            } else {
+                document.getElementById('supervisorModalTitle').textContent = 'Add New Supervisor';
+                document.getElementById('supervisorForm').reset();
+            }
+        }
+
+        function editUser(userId) {
+            openUserModal(userId);
+        }
+
+        function editStaff(staffId) {
+            openStaffModal(staffId);
+        }
+
+        function editSupervisor(supId) {
+            openSupervisorModal(supId);
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                users = users.filter(u => u.id !== userId);
+                loadUsers();
+                console.log('Delete user:', userId);
+                // API call: DELETE /api/users/{id}
+            }
+        }
+
+        function deleteEvent(eventId) {
+            if (confirm('Are you sure you want to delete this event?')) {
+                events = events.filter(e => e.id !== eventId);
+                loadEvents();
+                console.log('Delete event:', eventId);
+                // API call: DELETE /api/events/{id}
+            }
+        }
+
+        function deleteStaff(staffId) {
+            if (confirm('Are you sure you want to delete this staff member?')) {
+                staff = staff.filter(s => s.id !== staffId);
+                loadStaff();
+                console.log('Delete staff:', staffId);
+                // API call: DELETE /api/staff/{id}
+            }
+        }
+
+        function deleteSupervisor(supId) {
+            if (confirm('Are you sure you want to delete this supervisor?')) {
+                supervisors = supervisors.filter(s => s.id !== supId);
+                loadSupervisors();
+                console.log('Delete supervisor:', supId);
+                // API call: DELETE /api/supervisors/{id}
+            }
+        }
+
+        function viewEvent(eventId) {
+            const event = events.find(e => e.id === eventId);
+            alert(`Event: ${event.name}\nCustomer: ${event.customer}\nDate: ${event.date}\nLocation: ${event.location}\nStatus: ${event.status}`);
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function downloadReport() {
+            console.log('Download Analytics Report');
+            // API call: GET /api/admin/analytics/download
+            alert('Analytics report will be downloaded.');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Form submissions
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userData = {
+                id: document.getElementById('userId').value || Date.now(),
+                name: document.getElementById('userName').value,
+                email: document.getElementById('userEmail').value,
+                password: document.getElementById('userPassword').value,
+                role: document.getElementById('userRole').value,
+                status: document.getElementById('userStatus').value,
+                joinDate: new Date().toISOString().split('T')[0]
+            };
+
+            console.log('User Data:', userData);
+            // API call: POST or PUT /api/users
+
+            if (document.getElementById('userId').value) {
+                const index = users.findIndex(u => u.id == userData.id);
+                users[index] = userData;
+            } else {
+                users.push(userData);
+            }
+
+            loadUsers();
+            closeModal('userModal');
+            alert('User saved successfully!');
+        });
+
+        document.getElementById('staffForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const staffData = {
+                id: document.getElementById('staffId').value || Date.now(),
+                name: document.getElementById('staffName').value,
+                email: document.getElementById('staffEmail').value,
+                password: document.getElementById('staffPassword').value,
+                role: document.getElementById('staffRole').value,
+                phone: document.getElementById('staffPhone').value,
+                status: 'active'
+            };
+
+            console.log('Staff Data:', staffData);
+            // API call: POST or PUT /api/staff
+
+            if (document.getElementById('staffId').value) {
+                const index = staff.findIndex(s => s.id == staffData.id);
+                staff[index] = staffData;
+            } else {
+                staff.push(staffData);
+            }
+
+            loadStaff();
+            closeModal('staffModal');
+            alert('Staff saved successfully!');
+        });
+
+        document.getElementById('supervisorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const supData = {
+                id: document.getElementById('supervisorId').value || Date.now(),
+                name: document.getElementById('supervisorName').value,
+                email: document.getElementById('supervisorEmail').value,
+                password: document.getElementById('supervisorPassword').value,
+                phone: document.getElementById('supervisorPhone').value,
+                department: document.getElementById('supervisorDepartment').value,
+                status: 'active'
+            };
+
+            console.log('Supervisor Data:', supData);
+            // API call: POST or PUT /api/supervisors
+
+            if (document.getElementById('supervisorId').value) {
+                const index = supervisors.findIndex(s => s.id == supData.id);
+                supervisors[index] = supData;
+            } else {
+                supervisors.push(supData);
+            }
+
+            loadSupervisors();
+            closeModal('supervisorModal');
+            alert('Supervisor saved successfully!');
+        });
+
+        document.getElementById('settingsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const settingsData = {
+                companyName: document.getElementById('companyName').value,
+                companyEmail: document.getElementById('companyEmail').value,
+                companyPhone: document.getElementById('companyPhone').value,
+                companyAddress: document.getElementById('companyAddress').value
+            };
+
+            console.log('Settings Data:', settingsData);
+            // API call: PUT /api/settings
+
+            alert('Settings saved successfully!');
+        });
+
+        // Initial load
+        loadUsers();
+    </script>

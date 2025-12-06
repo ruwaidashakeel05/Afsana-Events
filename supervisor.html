@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supervisor Dashboard - Afsanay Event Atelier</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+/* Navbar */
+        nav {
+            background-color: #502817;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-img {
+            width: 100px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            width: 100px;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: #d5bdaf;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .user-info {
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background-color: #d5bdaf;
+            color: #774936;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .logout-btn:hover {
+            background-color: #c9ad9d;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #888;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #774936;
+            border-bottom-color: #774936;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: #774936;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a3628;
+        }
+
+        /* Table */
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #f8f8f8;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            color: #555;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 1rem;
+            border-top: 1px solid #f0f0f0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        tr:hover {
+            background-color: #fafafa;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .btn-edit {
+            background-color: #774936;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background-color: #5a3628;
+        }
+
+        .btn-notify {
+            background-color: #d5bdaf;
+            color: #774936;
+        }
+
+        .btn-notify:hover {
+            background-color: #c9ad9d;
+        }
+
+        .btn-view {
+            background-color: #e8e8e8;
+            color: #333;
+        }
+
+        .btn-view:hover {
+            background-color: #d8d8d8;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-available {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-busy {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-in-progress {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            background-color: #774936;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.4rem;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.3rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: #555;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #774936;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background-color: #e0e0e0;
+            color: #333;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d0d0d0;
+        }
+
+        .btn-full {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Reviews */
+        .review-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .review-staff {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .review-rating {
+            color: #f39c12;
+            font-size: 1.1rem;
+        }
+
+        .review-content {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .review-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+                /* Footer */
+        footer {
+            background-color: #d5bdaf;
+            color: white;
+            padding: 3rem 6rem 1.5rem 4rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-logo {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #d5bdaf;
+        }
+
+        .footer-brand {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #d5bdaf;
+        }
+
+        .footer-address {
+            color: #774936;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .footer-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-center h3 {
+            color: #774936;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #774936;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: #d5bdaf;
+        }
+
+        .footer-right {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .footer-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #d5bdaf 0%, #d5bdaf 100%);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .footer-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(213, 189, 175, 0.3);
+            color: #774936;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo-section">
+                <img src="images/logo1.png" alt="Logo" class="logo-img">
+                <img src="images/logo-text.png" alt="Text" class="logo-text">
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div class="nav-right">
+            <div class="user-info">Supervisor: <strong>John Doe</strong></div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('staff')">Staff Management</button>
+            <button class="tab" onclick="switchTab('tasks')">Task Assignment</button>
+            <button class="tab" onclick="switchTab('reviews')">Staff Reviews</button>
+        </div>
+
+        <!-- Staff Management Tab -->
+        <div id="staffTab" class="tab-content active">
+            <div class="section-header">
+                <h2>Staff Members</h2>
+                <button class="btn-primary" onclick="openNotificationModal()">Send Notification to All</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="staffTableBody">
+                        <!-- Staff data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Task Assignment Tab -->
+        <div id="tasksTab" class="tab-content">
+            <div class="section-header">
+                <h2>Assigned Tasks</h2>
+                <button class="btn-primary" onclick="openTaskModal()">+ Assign New Task</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Event</th>
+                            <th>Assigned To</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tasksTableBody">
+                        <!-- Tasks data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Staff Reviews Tab -->
+        <div id="reviewsTab" class="tab-content">
+            <div class="section-header">
+                <h2>Staff Reviews from Customers</h2>
+            </div>
+            <div id="reviewsContainer">
+                <!-- Reviews will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Staff Modal -->
+    <div class="modal" id="editStaffModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Staff Details</h2>
+            </div>
+            <div class="modal-body">
+                <form id="editStaffForm">
+                    <input type="hidden" id="staffId">
+                    <div class="form-group">
+                        <label for="staffName">Name</label>
+                        <input type="text" id="staffName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="staffRole">Role</label>
+                        <select id="staffRole" required>
+                            <option value="caterer">Caterer</option>
+                            <option value="decorator">Decorator</option>
+                            <option value="photographer">Photographer</option>
+                            <option value="sound_tech">Sound Technician</option>
+                            <option value="coordinator">Event Coordinator</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="staffEmail">Email</label>
+                        <input type="email" id="staffEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="staffPhone">Phone</label>
+                        <input type="tel" id="staffPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="staffStatus">Status</label>
+                        <select id="staffStatus" required>
+                            <option value="available">Available</option>
+                            <option value="busy">Busy</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('editStaffModal')">Cancel</button>
+                        <button type="submit" class="btn-full btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Send Notification Modal -->
+    <div class="modal" id="notificationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="notificationTitle">Send Notification</h2>
+            </div>
+            <div class="modal-body">
+                <form id="notificationForm">
+                    <input type="hidden" id="notifyStaffId">
+                    <div class="form-group">
+                        <label for="notificationSubject">Subject</label>
+                        <input type="text" id="notificationSubject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="notificationMessage">Message</label>
+                        <textarea id="notificationMessage" required></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('notificationModal')">Cancel</button>
+                        <button type="submit" class="btn-full btn-primary">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assign Task Modal -->
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Assign Task</h2>
+            </div>
+            <div class="modal-body">
+                <form id="taskForm">
+                    <div class="form-group">
+                        <label for="taskName">Task Name</label>
+                        <input type="text" id="taskName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskEvent">Event</label>
+                        <select id="taskEvent" required>
+                            <option value="">Select event</option>
+                            <option value="1">Wedding Ceremony</option>
+                            <option value="2">Birthday Party</option>
+                            <option value="3">Corporate Event</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskStaff">Assign To</label>
+                        <select id="taskStaff" required>
+                            <option value="">Select staff</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDueDate">Due Date</label>
+                        <input type="date" id="taskDueDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDescription">Task Description</label>
+                        <textarea id="taskDescription"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('taskModal')">Cancel</button>
+                        <button type="submit" class="btn-full btn-primary">Assign Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <div class="footer-logo-section">
+                    <img src="images/logoOrg.png" alt="Logo" class="footer-logo">
+                </div>
+                <div class="footer-address">
+                    <p><strong>Address:</strong></p>
+                    <p>123 Main Street, F-10 Markaz</p>
+                    <p>Islamabad, Pakistan</p>
+                    <p style="margin-top: 1rem;"><strong>Phone:</strong> +92 300 1234567</p>
+                    <p><strong>Email:</strong> info@afsanayevents.com</p>
+                </div>
+            </div>
+
+            <div class="footer-center">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="home.html">Home</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="login.html">Login</a>
+                </div>
+            </div>
+
+            <div class="footer-right">
+                <div class="footer-image">
+                    <img src="images/ambiance1.jpg" alt="Events">
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Afsanay Event Atelier by ARK. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample data
+        let staffMembers = [
+            { id: 1, name: "Ali Khan", role: "Caterer", email: "ali@example.com", phone: "0300-1234567", status: "available" },
+            { id: 2, name: "Sara Ali", role: "Decorator", email: "sara@example.com", phone: "0301-2345678", status: "busy" },
+            { id: 3, name: "Bilal Hassan", role: "Photographer", email: "bilal@example.com", phone: "0302-3456789", status: "available" },
+            { id: 4, name: "Fatima Noor", role: "Sound Technician", email: "fatima@example.com", phone: "0303-4567890", status: "available" }
+        ];
+
+        let tasks = [
+            { id: 1, name: "Setup catering station", event: "Wedding Ceremony", assignedTo: "Ali Khan", dueDate: "2024-12-15", status: "pending" },
+            { id: 2, name: "Arrange decorations", event: "Birthday Party", assignedTo: "Sara Ali", dueDate: "2024-12-20", status: "in-progress" },
+            { id: 3, name: "Photo shoot preparation", event: "Corporate Event", assignedTo: "Bilal Hassan", dueDate: "2024-12-18", status: "completed" }
+        ];
+
+        let reviews = [
+            { id: 1, staffName: "Ali Khan", role: "Caterer", rating: 5, comment: "Excellent food quality and presentation. Very professional!", customer: "Customer A", date: "2024-11-25" },
+            { id: 2, staffName: "Sara Ali", role: "Decorator", rating: 4, comment: "Beautiful decorations, slightly delayed but worth the wait.", customer: "Customer B", date: "2024-11-20" },
+            { id: 3, staffName: "Bilal Hassan", role: "Photographer", rating: 5, comment: "Amazing work! Captured every moment perfectly.", customer: "Customer C", date: "2024-11-18" }
+        ];
+
+        function switchTab(tab) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(tab + 'Tab').classList.add('active');
+
+            // Load data based on tab
+            if (tab === 'staff') loadStaffTable();
+            if (tab === 'tasks') loadTasksTable();
+            if (tab === 'reviews') loadReviews();
+        }
+
+        function loadStaffTable() {
+            const tbody = document.getElementById('staffTableBody');
+            tbody.innerHTML = staffMembers.map(staff => `
+                <tr>
+                    <td>${staff.name}</td>
+                    <td>${staff.role}</td>
+                    <td>${staff.email}</td>
+                    <td>${staff.phone}</td>
+                    <td><span class="status-badge status-${staff.status}">${staff.status.charAt(0).toUpperCase() + staff.status.slice(1)}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-small btn-edit" onclick="editStaff(${staff.id})">Edit</button>
+                            <button class="btn-small btn-notify" onclick="sendNotification(${staff.id})">Notify</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadTasksTable() {
+            const tbody = document.getElementById('tasksTableBody');
+            tbody.innerHTML = tasks.map(task => `
+                <tr>
+                    <td>${task.name}</td>
+                    <td>${task.event}</td>
+                    <td>${task.assignedTo}</td>
+                    <td>${task.dueDate}</td>
+                    <td><span class="status-badge status-${task.status}">${task.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-small btn-view" onclick="viewTask(${task.id})">View</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadReviews() {
+            const container = document.getElementById('reviewsContainer');
+            container.innerHTML = reviews.map(review => `
+                <div class="review-card">
+                    <div class="review-header">
+                        <div>
+                            <div class="review-staff">${review.staffName}</div>
+                            <div style="font-size: 0.85rem; color: #888;">${review.role}</div>
+                        </div>
+                        <div class="review-rating">${'⭐'.repeat(review.rating)}</div>
+                    </div>
+                    <div class="review-content">${review.comment}</div>
+                    <div class="review-meta">
+                        <span>By ${review.customer}</span>
+                        <span>${review.date}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function editStaff(staffId) {
+            const staff = staffMembers.find(s => s.id === staffId);
+            document.getElementById('staffId').value = staff.id;
+            document.getElementById('staffName').value = staff.name;
+            document.getElementById('staffRole').value = staff.role.toLowerCase().replace(' ', '_');
+            document.getElementById('staffEmail').value = staff.email;
+            document.getElementById('staffPhone').value = staff.phone;
+            document.getElementById('staffStatus').value = staff.status;
+            document.getElementById('editStaffModal').classList.add('active');
+        }
+
+        function sendNotification(staffId) {
+            if (staffId) {
+                const staff = staffMembers.find(s => s.id === staffId);
+                document.getElementById('notificationTitle').textContent = `Send Notification to ${staff.name}`;
+                document.getElementById('notifyStaffId').value = staffId;
+            } else {
+                document.getElementById('notificationTitle').textContent = 'Send Notification to All Staff';
+                document.getElementById('notifyStaffId').value = '';
+            }
+            document.getElementById('notificationModal').classList.add('active');
+        }
+
+        function openNotificationModal() {
+            sendNotification(null);
+        }
+
+        function openTaskModal() {
+            const select = document.getElementById('taskStaff');
+            select.innerHTML = '<option value="">Select staff</option>' + 
+                staffMembers.map(s => `<option value="${s.id}">${s.name} (${s.role})</option>`).join('');
+            document.getElementById('taskModal').classList.add('active');
+        }
+
+        function viewTask(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            alert(`Task: ${task.name}\nEvent: ${task.event}\nAssigned To: ${task.assignedTo}\nDue Date: ${task.dueDate}\nStatus: ${task.status}`);
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Form handlers
+        document.getElementById('editStaffForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const staffId = document.getElementById('staffId').value;
+            const formData = {
+                id: staffId,
+                name: document.getElementById('staffName').value,
+                role: document.getElementById('staffRole').value,
+                email: document.getElementById('staffEmail').value,
+                phone: document.getElementById('staffPhone').value,
+                status: document.getElementById('staffStatus').value
+            };
+
+            console.log('Update Staff:', formData);
+            // API call: PUT /api/staff/{id}
+
+            const index = staffMembers.findIndex(s => s.id == staffId);
+            staffMembers[index] = formData;
+            loadStaffTable();
+            closeModal('editStaffModal');
+            alert('Staff details updated!');
+        });
+
+        document.getElementById('notificationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const notificationData = {
+                staffId: document.getElementById('notifyStaffId').value || 'all',
+                subject: document.getElementById('notificationSubject').value,
+                message: document.getElementById('notificationMessage').value
+            };
+
+            console.log('Send Notification:', notificationData);
+            // API call: POST /api/notifications
+
+            closeModal('notificationModal');
+            alert('Notification sent successfully!');
+            this.reset();
+        });
+
+        document.getElementById('taskForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const taskData = {
+                id: Date.now(),
+                name: document.getElementById('taskName').value,
+                event: document.getElementById('taskEvent').options[document.getElementById('taskEvent').selectedIndex].text,
+                assignedTo: document.getElementById('taskStaff').options[document.getElementById('taskStaff').selectedIndex].text,
+                dueDate: document.getElementById('taskDueDate').value,
+                description: document.getElementById('taskDescription').value,
+                status: 'pending'
+            };
+
+            console.log('Assign Task:', taskData);
+            // API call: POST /api/tasks
+
+            tasks.push(taskData);
+            loadTasksTable();
+            closeModal('taskModal');
+            alert('Task assigned successfully!');
+            this.reset();
+        });
+
+        // Initial load
+        loadStaffTable();
+    </script>
+</body>
+</html>

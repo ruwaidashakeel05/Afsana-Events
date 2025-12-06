@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Afsanay Event Atelier</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+/* Navbar */
+        nav {
+            background-color: #502817;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-img {
+            width: 100px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            width: 100px;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: #d5bdaf;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        /* Main Content */
+        .container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 1rem;
+        }
+
+        .auth-box {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 400px;
+            overflow: hidden;
+        }
+
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1.2rem;
+            text-align: center;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #888;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #774936;
+            border-bottom: 2px solid #774936;
+        }
+
+        .auth-body {
+            padding: 2.5rem;
+        }
+
+        .form-content {
+            display: none;
+        }
+
+        .form-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.3rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #774936;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.85rem;
+            background-color: #774936;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .btn:hover {
+            background-color: #5a3628;
+        }
+
+        .note {
+            background-color: #fafafa;
+            padding: 0.8rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            border-left: 3px solid #d5bdaf;
+        }
+
+        .note p {
+            color: #666;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #888;
+            font-size: 1.1rem;
+            padding: 5px;
+        }
+
+        .toggle-password:hover {
+            color: #774936;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 1.5rem;
+        }
+
+        .forgot-password a {
+            color: #774936;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+                /* Footer */
+        footer {
+            background-color: #d5bdaf;
+            color: white;
+            padding: 3rem 6rem 1.5rem 4rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-logo {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #d5bdaf;
+        }
+
+        .footer-brand {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #d5bdaf;
+        }
+
+        .footer-address {
+            color: #774936;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .footer-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-center h3 {
+            color: #774936;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #774936;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: #d5bdaf;
+        }
+
+        .footer-right {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .footer-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #d5bdaf 0%, #d5bdaf 100%);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .footer-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(213, 189, 175, 0.3);
+            color: #774936;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo-section">
+                <img src="images/logo1.png" alt="Logo" class="logo-img">
+                <img src="images/logo-text.png" alt="Text" class="logo-text">
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact Us</a>
+                <a href="login.html" class="login-btn">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="auth-box">
+            <!-- Tabs -->
+            <div class="auth-tabs">
+                <button class="tab active" onclick="switchTab('login')">Login</button>
+                <button class="tab" onclick="switchTab('signup')">Sign Up</button>
+            </div>
+
+            <div class="auth-body">
+                <!-- Login Form -->
+                <div id="loginForm" class="form-content active">
+                    <form id="loginFormElement">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="loginPassword" name="password" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('loginPassword', this)">👁️</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginRole">Role</label>
+                            <select id="loginRole" name="role" required>
+                                <option value="">Select role</option>
+                                <option value="admin">Admin</option>
+                                <option value="supervisor">Supervisor</option>
+                                <option value="staff">Staff</option>
+                                <option value="customer">Customer</option>
+                            </select>
+                        </div>
+                        <div class="forgot-password">
+                            <a href="#" onclick="forgotPassword(); return false;">Forgot Password?</a>
+                        </div>
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+                </div>
+
+                <!-- Signup Form -->
+                <div id="signupForm" class="form-content">
+                    <form id="signupFormElement">
+                        <div class="form-group">
+                            <label for="signupName">Full Name</label>
+                            <input type="text" id="signupName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupEmail">Email</label>
+                            <input type="email" id="signupEmail" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword">Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="signupPassword" name="password" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('signupPassword', this)">👁️</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupConfirmPassword">Confirm Password</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="signupConfirmPassword" name="confirmPassword" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('signupConfirmPassword', this)">👁️</button>
+                            </div>
+                        </div>
+                        <div class="note">
+                            <p>Staff, Supervisor, and Admin accounts are created by administrators only</p>
+                        </div>
+                        <div class="forgot-password">
+                            <a href="#" onclick="forgotPassword(); return false;">Forgot Password?</a>
+                        </div>
+                        <button type="submit" class="btn">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <div class="footer-logo-section">
+                    <img src="images/logoOrg.png" alt="Logo" class="footer-logo">
+                </div>
+                <div class="footer-address">
+                    <p><strong>Address:</strong></p>
+                    <p>123 Main Street, F-10 Markaz</p>
+                    <p>Islamabad, Pakistan</p>
+                    <p style="margin-top: 1rem;"><strong>Phone:</strong> +92 300 1234567</p>
+                    <p><strong>Email:</strong> info@afsanayevents.com</p>
+                </div>
+            </div>
+
+            <div class="footer-center">
+                <h3>Quick Links</h3>
+                <div class="footer-links">
+                    <a href="home.html">Home</a>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="login.html">Login</a>
+                </div>
+            </div>
+
+            <div class="footer-right">
+                <div class="footer-image">
+                    <img src="images/ambiance1.jpg" alt="Events">
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Afsanay Event Atelier by ARK. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function switchTab(tab) {
+            // Update tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update forms
+            const forms = document.querySelectorAll('.form-content');
+            forms.forEach(f => f.classList.remove('active'));
+            
+            if(tab === 'login') {
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                document.getElementById('signupForm').classList.add('active');
+            }
+        }
+
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            if(input.type === 'password') {
+                input.type = 'text';
+                button.textContent = '👁️‍🗨️';
+            } else {
+                input.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+
+        function forgotPassword() {
+            const email = prompt('Enter your email address:');
+            if(email) {
+                // Send to C++ backend
+                console.log('Forgot Password for:', email);
+                
+                // Example API call:
+                // fetch('/api/forgot-password', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify({ email: email })
+                // })
+                
+                alert('Password reset link will be sent to your email!');
+            }
+        }
+
+        // Login Form Handler
+        document.getElementById('loginFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                email: document.getElementById('loginEmail').value,
+                password: document.getElementById('loginPassword').value,
+                role: document.getElementById('loginRole').value
+            };
+            
+            // Send to C++ backend
+            console.log('Login Data:', formData);
+            
+            // Example API call:
+            // fetch('/api/login', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(formData)
+            // })
+            
+            alert('Login submitted! Check console for data.');
+        });
+
+        // Signup Form Handler
+        document.getElementById('signupFormElement').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            
+            if(password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            const formData = {
+                name: document.getElementById('signupName').value,
+                email: document.getElementById('signupEmail').value,
+                password: password,
+                role: 'customer'
+            };
+            
+            // Send to C++ backend
+            console.log('Signup Data:', formData);
+            
+            // Example API call:
+            // fetch('/api/signup', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(formData)
+            // })
+            
+            alert('Signup submitted! Check console for data.');
+        });
+    </script>
+</body>
+</html>
