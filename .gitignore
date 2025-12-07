@@ -1,0 +1,29 @@
+# Build artifacts
+*.exe
+*.o
+*.a
+*.so
+*.dll
+*.dylib
+build/
+dist/
+bin/
+
+# IDE and editor files
+.vs/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.user
+
+# Data files (optional - exclude for privacy)
+customers.txt
+events.txt
+
+# Compiled binary
+server.exe
+
+# Dependencies
+httplib.h
