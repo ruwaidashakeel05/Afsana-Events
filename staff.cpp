@@ -4,9 +4,15 @@
 
 StaffList::StaffList() {
     head = nullptr;
+    filename = "";
+}
+
+StaffList::StaffList(string file) : head(nullptr), filename(file) {
+    loadFromFile();
 }
 
 StaffList::~StaffList() {
+    saveToFile();
     StaffNode* temp;
     while (head) {
         temp = head;
@@ -15,8 +21,8 @@ StaffList::~StaffList() {
     }
 }
 
-void StaffList::addStaff(int id, string name, string role, string email, string phone, string status) {
-    StaffNode* newNode = new StaffNode{id, name, role, email, phone, status, nullptr};
+void StaffList::addStaff(int id, string name, string role, string email, string password, string phone, string status) {
+    StaffNode* newNode = new StaffNode{id, name, role, email, password, phone, nullptr};
     if (!head) {
         head = newNode;
     } else {
@@ -35,7 +41,6 @@ void StaffList::editStaff(int id) {
             cout << "Enter new role: "; cin >> staff->role;
             cout << "Enter new email: "; cin >> staff->email;
             cout << "Enter new phone: "; cin >> staff->phone;
-            cout << "Enter new status: "; cin >> staff->status;
             return;
         }
         staff = staff->next;
@@ -51,8 +56,7 @@ void StaffList::displayStaff() {
              << ", Name: " << temp->name
              << ", Role: " << temp->role
              << ", Email: " << temp->email
-             << ", Phone: " << temp->phone
-             << ", Status: " << temp->status << endl;
+             << ", Phone: " << temp->phone << endl;
         temp = temp->next;
     }
 }
@@ -66,12 +70,21 @@ StaffNode* StaffList::getStaff(int id) {
     return nullptr;
 }
 
+StaffNode* StaffList::loginStaff(string email, string password) {
+    StaffNode* temp = head;
+    while (temp) {
+        if (temp->email == email && temp->password == password) return temp;
+        temp = temp->next;
+    }
+    return nullptr;
+}
+
 void StaffList::saveToFile() {
     ofstream file("staff.txt");
     StaffNode* temp = head;
     while (temp) {
-        file << temp->id << "," << temp->name << "," << temp->role << "," << temp->email << ","
-             << temp->phone << "," << temp->status << endl;
+        file << temp->id << "|" << temp->name << "|" << temp->role << "|" << temp->email << "|"
+             << temp->password << "|" << temp->phone << endl;
         temp = temp->next;
     }
     file.close();
@@ -82,16 +95,46 @@ void StaffList::loadFromFile() {
     if (!file) return;
 
     int id;
-    string name, role, email, phone, status, line;
+    string name, role, email, password, phone, line;
     while (getline(file, line)) {
-        stringstream ss(line);
-        getline(ss, line, ','); id = stoi(line);
-        getline(ss, name, ',');
-        getline(ss, role, ',');
-        getline(ss, email, ',');
-        getline(ss, phone, ',');
-        getline(ss, status, ',');
-        addStaff(id, name, role, email, phone, status);
+        try {
+            stringstream ss(line);
+            getline(ss, line, '|'); id = stoi(line);
+            getline(ss, name, '|');
+            getline(ss, role, '|');
+            getline(ss, email, '|');
+            getline(ss, password, '|');
+            getline(ss, phone, '|');
+            addStaff(id, name, role, email, password, phone, "");
+        } catch (...) {
+            continue;
+        }
     }
     file.close();
+}
+
+bool StaffList::deleteStaff(int id) {
+    if (!head) return false;
+    
+    // If head is the target
+    if (head->id == id) {
+        StaffNode* temp = head;
+        head = head->next;
+        delete temp;
+        return true;
+    }
+    
+    // Search for the staff to delete
+    StaffNode* current = head;
+    while (current->next) {
+        if (current->next->id == id) {
+            StaffNode* temp = current->next;
+            current->next = current->next->next;
+            delete temp;
+            return true;
+        }
+        current = current->next;
+    }
+    
+    return false;
 }

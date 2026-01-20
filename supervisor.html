@@ -379,45 +379,6 @@
             font-weight: 500;
         }
 
-        /* Reviews */
-        .review-card {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .review-staff {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .review-rating {
-            color: #f39c12;
-            font-size: 1.1rem;
-        }
-
-        .review-content {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 0.5rem;
-        }
-
-        .review-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            color: #888;
-        }
-
                 /* Footer */
         footer {
             background-color: #d5bdaf;
@@ -542,7 +503,7 @@
                 <a href="contact.html">Contact Us</a>
             </div>
             <div class="nav-right">
-            <div class="user-info">Supervisor: <strong>John Doe</strong></div>
+            <div class="user-info">Supervisor: <strong id="supervisorName">Loading...</strong></div>
             <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
         </div>
@@ -553,16 +514,12 @@
         <!-- Tabs -->
         <div class="tabs">
             <button class="tab active" onclick="switchTab('staff', event)">Staff Management</button>
+            <button class="tab" onclick="switchTab('events', event)">Events</button>
             <button class="tab" onclick="switchTab('tasks', event)">Task Assignment</button>
-            <button class="tab" onclick="switchTab('reviews', event)">Staff Reviews</button>
         </div>
 
         <!-- Staff Management Tab -->
         <div id="staffTab" class="tab-content active">
-            <div class="section-header">
-                <h2>Staff Members</h2>
-                <button class="btn-primary" onclick="openNotificationModal()">Send Notification to All</button>
-            </div>
             <div class="table-container">
                 <table>
                     <thead>
@@ -582,6 +539,59 @@
             </div>
         </div>
 
+        <!-- Events Tab -->
+        <div id="eventsTab" class="tab-content">
+            <div class="section-header">
+                <h2>Events Management</h2>
+            </div>
+            
+            <!-- Pending Events Section -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="color: #333; margin-bottom: 1rem;">Pending Events (Awaiting Confirmation)</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Event Name</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Guests</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendingEventsTableBody">
+                            <!-- Pending events will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- My Assigned Events Section -->
+            <div>
+                <h3 style="color: #333; margin-bottom: 1rem;">My Assigned Events</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Event Name</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Guests</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myEventsTableBody">
+                            <!-- Supervisor's assigned events will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
         <!-- Task Assignment Tab -->
         <div id="tasksTab" class="tab-content">
             <div class="section-header">
@@ -592,8 +602,8 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Task</th>
-                            <th>Event</th>
+                            <th>Task Name</th>
+                            <th>Location</th>
                             <th>Assigned To</th>
                             <th>Due Date</th>
                             <th>Status</th>
@@ -604,16 +614,6 @@
                         <!-- Tasks data will be loaded here -->
                     </tbody>
                 </table>
-            </div>
-        </div>
-
-        <!-- Staff Reviews Tab -->
-        <div id="reviewsTab" class="tab-content">
-            <div class="section-header">
-                <h2>Staff Reviews from Customers</h2>
-            </div>
-            <div id="reviewsContainer">
-                <!-- Reviews will be loaded here -->
             </div>
         </div>
     </div>
@@ -664,29 +664,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Send Notification Modal -->
-    <div class="modal" id="notificationModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="notificationTitle">Send Notification</h2>
-            </div>
-            <div class="modal-body">
-                <form id="notificationForm">
-                    <input type="hidden" id="notifyStaffId">
-                    <div class="form-group">
-                        <label for="notificationSubject">Subject</label>
-                        <input type="text" id="notificationSubject" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="notificationMessage">Message</label>
-                        <textarea id="notificationMessage" required></textarea>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" class="btn-secondary" onclick="closeModal('notificationModal')">Cancel</button>
-                        <button type="submit" class="btn-full btn-primary">Send</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -704,13 +681,8 @@
                         <input type="text" id="taskName" required>
                     </div>
                     <div class="form-group">
-                        <label for="taskEvent">Event</label>
-                        <select id="taskEvent" required>
-                            <option value="">Select event</option>
-                            <option value="1">Wedding Ceremony</option>
-                            <option value="2">Birthday Party</option>
-                            <option value="3">Corporate Event</option>
-                        </select>
+                        <label for="taskLocation">Location</label>
+                        <input type="text" id="taskLocation" required>
                     </div>
                     <div class="form-group">
                         <label for="taskStaff">Assign To</label>
@@ -775,25 +747,122 @@
     </footer>
 
     <script>
-        // Sample data
-        let staffMembers = [
-            { id: 1, name: "Ali Khan", role: "Caterer", email: "ali@example.com", phone: "0300-1234567", status: "available" },
-            { id: 2, name: "Sara Ali", role: "Decorator", email: "sara@example.com", phone: "0301-2345678", status: "busy" },
-            { id: 3, name: "Bilal Hassan", role: "Photographer", email: "bilal@example.com", phone: "0302-3456789", status: "available" },
-            { id: 4, name: "Fatima Noor", role: "Sound Technician", email: "fatima@example.com", phone: "0303-4567890", status: "available" }
-        ];
+        // ========== UPDATED: Check for sessionId instead of token ==========
+        let supervisorSessionId = null;
+        document.addEventListener('DOMContentLoaded', function() {
+            supervisorSessionId = localStorage.getItem('supervisor_sessionId');
+            if (!supervisorSessionId) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Set supervisor name
+            const supervisorName = localStorage.getItem('supervisor_name') || 'Supervisor';
+            document.getElementById('supervisorName').textContent = supervisorName;
+            
+            // Load data from backend
+            loadStaffTable();
+            loadTasksTable();
+            
+            // Auto-refresh task status every 5 seconds
+            setInterval(function() {
+                const activeTab = document.querySelector('.tab.active');
+                if (activeTab && activeTab.textContent.includes('Tasks')) {
+                    loadTasksTable();
+                }
+            }, 5000);
+        });
 
-        let tasks = [
-            { id: 1, name: "Setup catering station", event: "Wedding Ceremony", assignedTo: "Ali Khan", dueDate: "2024-12-15", status: "pending" },
-            { id: 2, name: "Arrange decorations", event: "Birthday Party", assignedTo: "Sara Ali", dueDate: "2024-12-20", status: "in-progress" },
-            { id: 3, name: "Photo shoot preparation", event: "Corporate Event", assignedTo: "Bilal Hassan", dueDate: "2024-12-18", status: "completed" }
-        ];
+        // Data arrays
+        let staffMembers = [];
+        let tasks = [];
 
-        let reviews = [
-            { id: 1, staffName: "Ali Khan", role: "Caterer", rating: 5, comment: "Excellent food quality and presentation. Very professional!", customer: "Customer A", date: "2024-11-25" },
-            { id: 2, staffName: "Sara Ali", role: "Decorator", rating: 4, comment: "Beautiful decorations, slightly delayed but worth the wait.", customer: "Customer B", date: "2024-11-20" },
-            { id: 3, staffName: "Bilal Hassan", role: "Photographer", rating: 5, comment: "Amazing work! Captured every moment perfectly.", customer: "Customer C", date: "2024-11-18" }
-        ];
+        // ========== UPDATED: Use X-Session-ID header ==========
+        function getAuthHeaders() {
+            const sessionId = localStorage.getItem('supervisor_sessionId') || '';
+            return sessionId ? { 'X-Session-ID': sessionId } : {};
+        }
+
+        // Fetch staff from backend
+        function loadStaffTable() {
+            fetch('/api/staff', {
+                method: 'GET',
+                headers: getAuthHeaders(),
+                credentials: 'include'  // ADDED
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    staffMembers = data;
+                    renderStaffTable();
+                }
+            })
+            .catch(err => {
+                console.error('Error loading staff:', err);
+                renderStaffTable();
+            });
+        }
+
+        function renderStaffTable() {
+            const tbody = document.getElementById('staffTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = staffMembers.map(staff => `
+                <tr>
+                    <td>${staff.name || 'N/A'}</td>
+                    <td>${staff.role || 'N/A'}</td>
+                    <td>${staff.email || 'N/A'}</td>
+                    <td>${staff.phone || 'N/A'}</td>
+                    <td><span class="status-badge status-available">Available</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-small btn-edit" onclick="editStaff(${staff.id})">Edit</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Fetch tasks from backend
+        function loadTasksTable() {
+            fetch('/api/supervisor/tasks', {
+                method: 'GET',
+                headers: getAuthHeaders(),
+                credentials: 'include'  // ADDED
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    tasks = data;
+                }
+                renderTasksTable();
+            })
+            .catch(err => {
+                console.error('Error loading tasks:', err);
+                renderTasksTable();
+            });
+        }
+
+        function renderTasksTable() {
+            const tbody = document.getElementById('tasksTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = tasks.map(task => {
+                const staffMember = staffMembers.find(s => s.id === task.staffId);
+                const staffName = staffMember ? staffMember.name : 'N/A';
+                return `
+                <tr>
+                    <td>${task.description || 'N/A'}</td>
+                    <td>${task.location || 'N/A'}</td>
+                    <td>${staffName}</td>
+                    <td>${task.dueDate || 'N/A'}</td>
+                    <td><span class="status-badge status-${task.status || 'pending'}">${(task.status || 'pending').replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-small btn-view" onclick="viewTask(${task.id})">View</button>
+                        </div>
+                    </td>
+                </tr>
+            `}).join('');
+        }
 
         function switchTab(tab, event) {
             // Update tabs
@@ -806,92 +875,151 @@
 
             // Load data based on tab
             if (tab === 'staff') loadStaffTable();
+            if (tab === 'events') loadEvents();
             if (tab === 'tasks') loadTasksTable();
-            if (tab === 'reviews') loadReviews();
         }
 
-        function loadStaffTable() {
-            const tbody = document.getElementById('staffTableBody');
-            tbody.innerHTML = staffMembers.map(staff => `
+        // Events Management Functions
+        let pendingEvents = [];
+        let myEvents = [];
+
+        function loadEvents() {
+            // Load pending events
+            fetch('/api/supervisor/event-requests', {
+                method: 'GET',
+                headers: getAuthHeaders(),
+                credentials: 'include'  // ADDED
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    pendingEvents = data;
+                }
+                renderPendingEvents();
+            })
+            .catch(err => {
+                console.error('Error loading pending events:', err);
+                renderPendingEvents();
+            });
+            
+            // Load supervisor's assigned events
+            fetch('/api/supervisor/events', {
+                method: 'GET',
+                headers: getAuthHeaders(),
+                credentials: 'include'  // ADDED
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    myEvents = data;
+                }
+                renderMyEvents();
+            })
+            .catch(err => {
+                console.error('Error loading my events:', err);
+                renderMyEvents();
+            });
+        }
+
+        function renderPendingEvents() {
+            const tbody = document.getElementById('pendingEventsTableBody');
+            if (!tbody) return;
+            
+            if (pendingEvents.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #888;">No pending events</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = pendingEvents.map(event => `
                 <tr>
-                    <td>${staff.name}</td>
-                    <td>${staff.role}</td>
-                    <td>${staff.email}</td>
-                    <td>${staff.phone}</td>
-                    <td><span class="status-badge status-${staff.status}">${staff.status.charAt(0).toUpperCase() + staff.status.slice(1)}</span></td>
+                    <td>${event.name || 'N/A'}</td>
+                    <td>${event.type || 'N/A'}</td>
+                    <td>${event.date || 'N/A'}</td>
+                    <td>${event.guests || 0}</td>
+                    <td>${event.location || 'N/A'}</td>
+                    <td><span class="status-badge status-pending">Pending</span></td>
                     <td>
                         <div class="action-btns">
-                            <button class="btn-small btn-edit" onclick="editStaff(${staff.id})">Edit</button>
-                            <button class="btn-small btn-notify" onclick="sendNotification(${staff.id})">Notify</button>
+                            <button class="btn-small btn-edit" onclick="acceptEvent(${event.id}, '${event.name}')">Accept</button>
+                            <button class="btn-small btn-view" onclick="viewEventDetails(${event.id})">View</button>
                         </div>
                     </td>
                 </tr>
             `).join('');
         }
 
-        function loadTasksTable() {
-            const tbody = document.getElementById('tasksTableBody');
-            tbody.innerHTML = tasks.map(task => `
+        function renderMyEvents() {
+            const tbody = document.getElementById('myEventsTableBody');
+            if (!tbody) return;
+            
+            if (myEvents.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #888;">No assigned events</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = myEvents.map(event => `
                 <tr>
-                    <td>${task.name}</td>
-                    <td>${task.event}</td>
-                    <td>${task.assignedTo}</td>
-                    <td>${task.dueDate}</td>
-                    <td><span class="status-badge status-${task.status}">${task.status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</span></td>
+                    <td>${event.name || 'N/A'}</td>
+                    <td>${event.type || 'N/A'}</td>
+                    <td>${event.date || 'N/A'}</td>
+                    <td>${event.guests || 0}</td>
+                    <td>${event.location || 'N/A'}</td>
+                    <td><span class="status-badge status-${event.status || 'confirmed'}">${(event.status || 'confirmed').charAt(0).toUpperCase() + (event.status || 'confirmed').slice(1)}</span></td>
                     <td>
                         <div class="action-btns">
-                            <button class="btn-small btn-view" onclick="viewTask(${task.id})">View</button>
+                            <button class="btn-small btn-view" onclick="viewEventDetails(${event.id})">View</button>
                         </div>
                     </td>
                 </tr>
             `).join('');
         }
 
-        function loadReviews() {
-            const container = document.getElementById('reviewsContainer');
-            container.innerHTML = reviews.map(review => `
-                <div class="review-card">
-                    <div class="review-header">
-                        <div>
-                            <div class="review-staff">${review.staffName}</div>
-                            <div style="font-size: 0.85rem; color: #888;">${review.role}</div>
-                        </div>
-                        <div class="review-rating">${'⭐'.repeat(review.rating)}</div>
-                    </div>
-                    <div class="review-content">${review.comment}</div>
-                    <div class="review-meta">
-                        <span>By ${review.customer}</span>
-                        <span>${review.date}</span>
-                    </div>
-                </div>
-            `).join('');
+        function acceptEvent(eventId, eventName) {
+            if (!confirm(`Accept event "${eventName}"?`)) return;
+            
+            fetch(`/api/supervisor/accept-event/${eventId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeaders()
+                },
+                credentials: 'include'  // ADDED
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Event accepted successfully!');
+                    loadEvents();
+                } else {
+                    alert('Failed to accept event: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(err => {
+                console.error('Error accepting event:', err);
+                alert('Error accepting event');
+            });
+        }
+
+        function viewEventDetails(eventId) {
+            const event = pendingEvents.find(e => e.id === eventId) || myEvents.find(e => e.id === eventId);
+            if (!event) {
+                alert('Event not found');
+                return;
+            }
+            alert(`Event Details:\n\nName: ${event.name}\nType: ${event.type}\nDate: ${event.date}\nTime: ${event.time || 'N/A'}\nLocation: ${event.location}\nGuests: ${event.guests}\nStatus: ${event.status}\nDescription: ${event.description || 'N/A'}`);
         }
 
         function editStaff(staffId) {
             const staff = staffMembers.find(s => s.id === staffId);
+            if (!staff) return;
+            
             document.getElementById('staffId').value = staff.id;
             document.getElementById('staffName').value = staff.name;
             document.getElementById('staffRole').value = staff.role.toLowerCase().replace(' ', '_');
             document.getElementById('staffEmail').value = staff.email;
             document.getElementById('staffPhone').value = staff.phone;
-            document.getElementById('staffStatus').value = staff.status;
+            document.getElementById('staffStatus').value = 'available';
             document.getElementById('editStaffModal').classList.add('active');
-        }
-
-        function sendNotification(staffId) {
-            if (staffId) {
-                const staff = staffMembers.find(s => s.id === staffId);
-                document.getElementById('notificationTitle').textContent = `Send Notification to ${staff.name}`;
-                document.getElementById('notifyStaffId').value = staffId;
-            } else {
-                document.getElementById('notificationTitle').textContent = 'Send Notification to All Staff';
-                document.getElementById('notifyStaffId').value = '';
-            }
-            document.getElementById('notificationModal').classList.add('active');
-        }
-
-        function openNotificationModal() {
-            sendNotification(null);
         }
 
         function openTaskModal() {
@@ -903,16 +1031,31 @@
 
         function viewTask(taskId) {
             const task = tasks.find(t => t.id === taskId);
-            alert(`Task: ${task.name}\nEvent: ${task.event}\nAssigned To: ${task.assignedTo}\nDue Date: ${task.dueDate}\nStatus: ${task.status}`);
+            if (!task) return;
+            
+            const staffMember = staffMembers.find(s => s.id === task.staffId);
+            const staffName = staffMember ? staffMember.name : 'N/A';
+            
+            alert(`Task Details:\n\nDescription: ${task.description}\nLocation: ${task.location}\nAssigned To: ${staffName}\nDue Date: ${task.dueDate}\nStatus: ${task.status}\nDetails: ${task.taskDetails || 'N/A'}`);
         }
 
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
         }
 
+        // ========== UPDATED: Logout function ==========
         function logout() {
             if (confirm('Are you sure you want to logout?')) {
-                window.location.href = 'login.html';
+                fetch('http://localhost:8080/api/auth/logout', {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    credentials: 'include'
+                }).finally(() => {
+                    localStorage.removeItem('supervisor_sessionId');
+                    localStorage.removeItem('supervisor_name');
+                    localStorage.removeItem('supervisor_id');
+                    window.location.href = 'login.html';
+                });
             }
         }
 
@@ -921,60 +1064,81 @@
             e.preventDefault();
             const staffId = document.getElementById('staffId').value;
             const formData = {
-                id: staffId,
                 name: document.getElementById('staffName').value,
                 role: document.getElementById('staffRole').value,
                 email: document.getElementById('staffEmail').value,
-                phone: document.getElementById('staffPhone').value,
-                status: document.getElementById('staffStatus').value
+                phone: document.getElementById('staffPhone').value
             };
 
-            console.log('Update Staff:', formData);
-            // API call: PUT /api/staff/{id}
-
-            const index = staffMembers.findIndex(s => s.id == staffId);
-            staffMembers[index] = formData;
-            loadStaffTable();
-            closeModal('editStaffModal');
-            alert('Staff details updated!');
-        });
-
-        document.getElementById('notificationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const notificationData = {
-                staffId: document.getElementById('notifyStaffId').value || 'all',
-                subject: document.getElementById('notificationSubject').value,
-                message: document.getElementById('notificationMessage').value
-            };
-
-            console.log('Send Notification:', notificationData);
-            // API call: POST /api/notifications
-
-            closeModal('notificationModal');
-            alert('Notification sent successfully!');
-            this.reset();
+            fetch(`/api/supervisor/staff/${staffId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeaders()
+                },
+                body: JSON.stringify(formData),
+                credentials: 'include'  // ADDED
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Staff details updated!');
+                    loadStaffTable();
+                    closeModal('editStaffModal');
+                } else {
+                    alert('Failed to update: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                alert('Error updating staff');
+            });
         });
 
         document.getElementById('taskForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const taskData = {
-                id: Date.now(),
-                name: document.getElementById('taskName').value,
-                event: document.getElementById('taskEvent').options[document.getElementById('taskEvent').selectedIndex].text,
-                assignedTo: document.getElementById('taskStaff').options[document.getElementById('taskStaff').selectedIndex].text,
-                dueDate: document.getElementById('taskDueDate').value,
-                description: document.getElementById('taskDescription').value,
-                status: 'pending'
-            };
+            
+            const staffId = parseInt(document.getElementById('taskStaff').value);
+            const description = document.getElementById('taskName').value;
+            const taskDetails = document.getElementById('taskDescription').value;
+            const location = document.getElementById('taskLocation').value;
+            const dueDate = document.getElementById('taskDueDate').value;
+            
+            if (!staffId || !description || !location || !dueDate) {
+                alert('Please fill in all fields');
+                return;
+            }
 
-            console.log('Assign Task:', taskData);
-            // API call: POST /api/tasks
-
-            tasks.push(taskData);
-            loadTasksTable();
-            closeModal('taskModal');
-            alert('Task assigned successfully!');
-            this.reset();
+            fetch('/api/supervisor/task/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...getAuthHeaders()
+                },
+                body: JSON.stringify({
+                    staffId: staffId,
+                    description: description,
+                    taskDetails: taskDetails,
+                    location: location,
+                    dueDate: dueDate
+                }),
+                credentials: 'include'  // ADDED
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Task assigned successfully!');
+                    loadTasksTable();
+                    closeModal('taskModal');
+                    this.reset();
+                } else {
+                    alert('Error: ' + (data.message || 'Failed to assign task'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error assigning task');
+            });
         });
 
         // Initial load

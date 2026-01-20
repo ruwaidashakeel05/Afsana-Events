@@ -1,0 +1,3 @@
+1|Sania Iqbal|decorator|saniaiqbal@afsanayevents.com|saniaiqbal|03159876543
+2|Nimra Tariq|photographer|nimratariq@afsanayevents.com|nimratariq|03047651234
+3|Bilal Ahmed|caterer|bilalahmed@afsanayevents.com|bilalahmed|03112349890

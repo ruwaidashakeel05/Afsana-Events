@@ -1,1 +1,6 @@
-1|Ruwaida Shakeel|ruwaidashakeel05@gmail.com|ruwaida|03297934675|Khokhar Manzil, Wazirabad
+1|Ruwaida Shakeel|ruwaidashakeel05@gmail.com|ruwaida|03001234567|Gulshan-e-Iqbal, Karachi
+2|Hamza Ali|hamza123@gmail.com|hamza123|03014567892|North Nazimabad, Karachi
+4|Usman Raza|usmanraza@gmail.com|usmanraza|03456781235|Bahria Town, Rawalpindi
+5|Zoya Hassan|zoyahassan@gmail.com|zoyahassan|03222334455|Gulshan-e-Maymar, Karachi
+6|Ayesha Ali|ayesha@gmail.com|ayesha123|03297934363|12,lahore
+7|Ali Ahmad|aliahmad12345@gmail.com|ahmadkhan|03005270509|islamabad

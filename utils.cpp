@@ -36,3 +36,21 @@ int parseJSONInt(string json, string key) {
         return 0;
     }
 }
+
+// JSON Escaping function
+string escapeJSON(const string& str) {
+    string result;
+    for (char c : str) {
+        switch (c) {
+            case '"': result += "\\\""; break;
+            case '\\': result += "\\\\"; break;
+            case '\b': result += "\\b"; break;
+            case '\f': result += "\\f"; break;
+            case '\n': result += "\\n"; break;
+            case '\r': result += "\\r"; break;
+            case '\t': result += "\\t"; break;
+            default: result += c;
+        }
+    }
+    return result;
+}

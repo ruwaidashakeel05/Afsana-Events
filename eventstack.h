@@ -2,6 +2,7 @@
 #define EVENTSTACK_H
 
 #include "event.h"
+#include "utils.h"
 #include <iostream>
 #include <string>
 using namespace std;
@@ -17,6 +18,7 @@ struct HistoryNode {
     string address;
     int guests;
     string description;
+    string services;
     string status;
     string completedDate;
     HistoryNode* next;
@@ -51,6 +53,7 @@ public:
         newNode->address = event->address;
         newNode->guests = event->guests;
         newNode->description = event->description;
+        newNode->services = event->services;
         newNode->status = event->status;
         newNode->completedDate = "";
         newNode->next = top;
@@ -69,8 +72,37 @@ public:
                     ",\"name\":\"" + current->name + 
                     "\",\"type\":\"" + current->type + 
                     "\",\"date\":\"" + current->date + 
+                    "\",\"services\":\"" + current->services + 
                     "\",\"status\":\"" + current->status + "\"}";
             first = false;
+            current = current->next;
+        }
+        json += "]";
+        return json;
+    }
+
+    string getCustomerHistoryJSON(int customerId) {
+        string json = "[";
+        bool first = true;
+        HistoryNode* current = top;
+        
+        while (current) {
+            if (current->customerId == customerId) {
+                if (!first) json += ",";
+                json += "{\"id\":" + to_string(current->id) + 
+                        ",\"customerId\":" + to_string(current->customerId) +
+                        ",\"name\":\"" + escapeJSON(current->name) + 
+                        "\",\"type\":\"" + escapeJSON(current->type) + 
+                        "\",\"date\":\"" + escapeJSON(current->date) + 
+                        "\",\"time\":\"" + escapeJSON(current->time) +
+                        "\",\"location\":\"" + escapeJSON(current->location) +
+                        "\",\"address\":\"" + escapeJSON(current->address) +
+                        "\",\"guests\":" + to_string(current->guests) +
+                        ",\"description\":\"" + escapeJSON(current->description) +
+                        "\",\"services\":\"" + escapeJSON(current->services) + 
+                        "\",\"status\":\"" + escapeJSON(current->status) + "\"}";
+                first = false;
+            }
             current = current->next;
         }
         json += "]";

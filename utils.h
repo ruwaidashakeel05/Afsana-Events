@@ -8,4 +8,6 @@ using namespace std;
 string parseJSON(string json, string key);
 int parseJSONInt(string json, string key);
 
+string escapeJSON(const string& str);
+
 #endif

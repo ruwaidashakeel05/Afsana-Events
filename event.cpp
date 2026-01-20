@@ -1,4 +1,6 @@
 #include "event.h"
+#include "customer.h"
+#include "supervisor.h"
 
 // ==================== CONSTRUCTOR & DESTRUCTOR ====================
 EventList::EventList(string file) : head(nullptr), nextId(1), filename(file) {
@@ -35,7 +37,9 @@ void EventList::saveToFile() {
              << current->address << "|"
              << current->guests << "|" 
              << current->description << "|" 
-             << current->status << endl;
+             << current->services << "|"
+             << current->status << "|"
+             << current->assignedSupervisorId << endl;
         current = current->next;
     }
     file.close();
@@ -48,7 +52,7 @@ void EventList::loadFromFile() {
     string line;
     while (getline(file, line)) {
         stringstream ss(line);
-        string idStr, customerIdStr, name, type, date, time, location, address, guestsStr, description, status;
+        string idStr, customerIdStr, name, type, date, time, location, address, guestsStr, description, services, status, supervisorIdStr;
 
         getline(ss, idStr, '|');
         getline(ss, customerIdStr, '|');
@@ -60,14 +64,23 @@ void EventList::loadFromFile() {
         getline(ss, address, '|');
         getline(ss, guestsStr, '|');
         getline(ss, description, '|');
+        getline(ss, services, '|');
         getline(ss, status, '|');
+        getline(ss, supervisorIdStr, '|');
 
-        int id = stoi(idStr);
-        int customerId = stoi(customerIdStr);
-        int guests = stoi(guestsStr);
+        int id = 0, customerId = 0, guests = 0, supervisorId = 0;
+        try {
+            id = stoi(idStr);
+            customerId = stoi(customerIdStr);
+            guests = stoi(guestsStr);
+            supervisorId = stoi(supervisorIdStr);
+        } catch (...) {
+            continue;
+        }
 
         EventNode* newEvent = new EventNode(id, customerId, name, type, date, time,
-                                            location, address, guests, description, status);
+                                            location, address, guests, description, services, status);
+        newEvent->assignedSupervisorId = supervisorId;
 
         if (head == nullptr) {
             head = newEvent;
@@ -85,9 +98,9 @@ void EventList::loadFromFile() {
 
 // ==================== EVENT OPERATIONS ====================
 int EventList::addEvent(int customerId, string name, string type, string date, string time,
-                        string location, string address, int guests, string description) {
+                        string location, string address, int guests, string description, string services) {
     EventNode* newEvent = new EventNode(nextId++, customerId, name, type, date, time,
-                                        location, address, guests, description);
+                                        location, address, guests, description, services);
 
     if (head == nullptr) head = newEvent;
     else {
@@ -109,7 +122,7 @@ EventNode* EventList::getEvent(int id) {
 }
 
 bool EventList::updateEvent(int id, string name, string type, string date, string time,
-                            string location, string address, int guests, string description) {
+                            string location, string address, int guests, string description, string services) {
     EventNode* event = getEvent(id);
     if (event != nullptr) {
         event->name = name;
@@ -120,6 +133,7 @@ bool EventList::updateEvent(int id, string name, string type, string date, strin
         event->address = address;
         event->guests = guests;
         event->description = description;
+        event->services = services;
         saveToFile();
         return true;
     }
@@ -160,15 +174,16 @@ string EventList::getAllEventsJSON() {
     while (current != nullptr) {
         if (!first) json += ",";
         json += "{\"id\":" + to_string(current->id) + ",";
-        json += "\"name\":\"" + current->name + "\",";
-        json += "\"type\":\"" + current->type + "\",";
-        json += "\"date\":\"" + current->date + "\",";
-        json += "\"time\":\"" + current->time + "\",";
-        json += "\"location\":\"" + current->location + "\",";
-        json += "\"address\":\"" + current->address + "\",";
+        json += "\"name\":\"" + escapeJSON(current->name) + "\",";
+        json += "\"type\":\"" + escapeJSON(current->type) + "\",";
+        json += "\"date\":\"" + escapeJSON(current->date) + "\",";
+        json += "\"time\":\"" + escapeJSON(current->time) + "\",";
+        json += "\"location\":\"" + escapeJSON(current->location) + "\",";
+        json += "\"address\":\"" + escapeJSON(current->address) + "\",";
         json += "\"guests\":" + to_string(current->guests) + ",";
-        json += "\"description\":\"" + current->description + "\",";
-        json += "\"status\":\"" + current->status + "\"}";
+        json += "\"description\":\"" + escapeJSON(current->description) + "\",";
+        json += "\"services\":\"" + escapeJSON(current->services) + "\",";
+        json += "\"status\":\"" + escapeJSON(current->status) + "\"}";
         first = false;
         current = current->next;
     }
@@ -187,15 +202,16 @@ string EventList::getCustomerEventsJSON(int customerId) {
         if (current->customerId == customerId) {
             if (!first) json += ",";
             json += "{\"id\":" + to_string(current->id) + ",";
-            json += "\"name\":\"" + current->name + "\",";
-            json += "\"type\":\"" + current->type + "\",";
-            json += "\"date\":\"" + current->date + "\",";
-            json += "\"time\":\"" + current->time + "\",";
-            json += "\"location\":\"" + current->location + "\",";
-            json += "\"address\":\"" + current->address + "\",";
+            json += "\"name\":\"" + escapeJSON(current->name) + "\",";
+            json += "\"type\":\"" + escapeJSON(current->type) + "\",";
+            json += "\"date\":\"" + escapeJSON(current->date) + "\",";
+            json += "\"time\":\"" + escapeJSON(current->time) + "\",";
+            json += "\"location\":\"" + escapeJSON(current->location) + "\",";
+            json += "\"address\":\"" + escapeJSON(current->address) + "\",";
             json += "\"guests\":" + to_string(current->guests) + ",";
-            json += "\"description\":\"" + current->description + "\",";
-            json += "\"status\":\"" + current->status + "\"}";
+            json += "\"description\":\"" + escapeJSON(current->description) + "\",";
+            json += "\"services\":\"" + escapeJSON(current->services) + "\",";
+            json += "\"status\":\"" + escapeJSON(current->status) + "\"}";
             first = false;
         }
         current = current->next;
@@ -203,4 +219,162 @@ string EventList::getCustomerEventsJSON(int customerId) {
 
     json += "]";
     return json;
+}
+
+string EventList::getCustomerEventsWithSupervisorJSON(int customerId, SupervisorList* supervisorList) {
+    string json = "[";
+    EventNode* current = head;
+    bool first = true;
+
+    while (current != nullptr) {
+        if (current->customerId == customerId) {
+            if (!first) json += ",";
+            json += "{\"id\":" + to_string(current->id) + ",";
+            json += "\"name\":\"" + escapeJSON(current->name) + "\",";
+            json += "\"type\":\"" + escapeJSON(current->type) + "\",";
+            json += "\"date\":\"" + escapeJSON(current->date) + "\",";
+            json += "\"time\":\"" + escapeJSON(current->time) + "\",";
+            json += "\"location\":\"" + escapeJSON(current->location) + "\",";
+            json += "\"address\":\"" + escapeJSON(current->address) + "\",";
+            json += "\"guests\":" + to_string(current->guests) + ",";
+            json += "\"description\":\"" + escapeJSON(current->description) + "\",";
+            json += "\"services\":\"" + escapeJSON(current->services) + "\",";
+            json += "\"status\":\"" + escapeJSON(current->status) + "\"";
+            
+            // Add supervisor info if event is confirmed and has assigned supervisor
+            if (current->status == "confirmed" && current->assignedSupervisorId != 0 && supervisorList) {
+                SupervisorNode* supervisor = supervisorList->findById(current->assignedSupervisorId);
+                if (supervisor) {
+                    json += ",\"supervisor\":{\"id\":" + to_string(supervisor->id) + 
+                            ",\"name\":\"" + escapeJSON(supervisor->name) +
+                            "\",\"email\":\"" + escapeJSON(supervisor->email) +
+                            "\",\"phone\":\"" + escapeJSON(supervisor->phone) + "\"}";
+                }
+            }
+            
+            json += "}";
+            first = false;
+        }
+        current = current->next;
+    }
+
+    json += "]";
+    return json;
+}
+
+string EventList::getAllEventsWithCustomerJSON(CustomerList* customerList) {
+    string json = "[";
+    EventNode* current = head;
+    bool first = true;
+
+    while (current != nullptr) {
+        if (!first) json += ",";
+        
+        // Get customer name from customer list
+        CustomerNode* customer = customerList->getHead();
+        string customerName = "Unknown";
+        while (customer != nullptr) {
+            if (customer->id == current->customerId) {
+                customerName = customer->name;
+                break;
+            }
+            customer = customer->next;
+        }
+        
+        json += "{\"id\":" + to_string(current->id) + ",";
+        json += "\"customerId\":" + to_string(current->customerId) + ",";
+        json += "\"name\":\"" + escapeJSON(current->name) + "\",";
+        json += "\"customerName\":\"" + escapeJSON(customerName) + "\",";
+        json += "\"type\":\"" + escapeJSON(current->type) + "\",";
+        json += "\"date\":\"" + escapeJSON(current->date) + "\",";
+        json += "\"time\":\"" + escapeJSON(current->time) + "\",";
+        json += "\"location\":\"" + escapeJSON(current->location) + "\",";
+        json += "\"address\":\"" + escapeJSON(current->address) + "\",";
+        json += "\"guests\":" + to_string(current->guests) + ",";
+        json += "\"description\":\"" + escapeJSON(current->description) + "\",";
+        json += "\"services\":\"" + escapeJSON(current->services) + "\",";
+        json += "\"status\":\"" + escapeJSON(current->status) + "\"}";
+        first = false;
+        current = current->next;
+    }
+
+    json += "]";
+    return json;
+}
+
+string EventList::getPendingEventsJSON() {
+    string json = "[";
+    bool first = true;
+    EventNode* current = head;
+    
+    while (current) {
+        if (current->status == "pending") {
+            if (!first) json += ",";
+            json += "{\"id\":" + to_string(current->id) +
+                    ",\"customerId\":" + to_string(current->customerId) +
+                    ",\"name\":\"" + escapeJSON(current->name) +
+                    "\",\"type\":\"" + escapeJSON(current->type) +
+                    "\",\"date\":\"" + current->date +
+                    "\",\"time\":\"" + current->time +
+                    "\",\"location\":\"" + escapeJSON(current->location) +
+                    "\",\"address\":\"" + escapeJSON(current->address) +
+                    "\",\"guests\":" + to_string(current->guests) +
+                    ",\"description\":\"" + escapeJSON(current->description) +
+                    "\",\"services\":\"" + escapeJSON(current->services) +
+                    "\",\"status\":\"" + current->status + "\"}";
+            first = false;
+        }
+        current = current->next;
+    }
+    json += "]";
+    return json;
+}
+
+string EventList::getSupervisorEventsJSON(int supervisorId) {
+    string json = "[";
+    bool first = true;
+    EventNode* current = head;
+    
+    while (current) {
+        if (current->assignedSupervisorId == supervisorId) {
+            if (!first) json += ",";
+            json += "{\"id\":" + to_string(current->id) +
+                    ",\"customerId\":" + to_string(current->customerId) +
+                    ",\"name\":\"" + escapeJSON(current->name) +
+                    "\",\"type\":\"" + escapeJSON(current->type) +
+                    "\",\"date\":\"" + current->date +
+                    "\",\"time\":\"" + current->time +
+                    "\",\"location\":\"" + escapeJSON(current->location) +
+                    "\",\"address\":\"" + escapeJSON(current->address) +
+                    "\",\"guests\":" + to_string(current->guests) +
+                    ",\"description\":\"" + escapeJSON(current->description) +
+                    "\",\"services\":\"" + escapeJSON(current->services) +
+                    "\",\"status\":\"" + current->status +
+                    "\",\"assignedSupervisorId\":" + to_string(current->assignedSupervisorId) + "}";
+            first = false;
+        }
+        current = current->next;
+    }
+    json += "]";
+    return json;
+}
+
+bool EventList::assignEventToSupervisor(int eventId, int supervisorId) {
+    EventNode* event = getEvent(eventId);
+    if (event) {
+        event->assignedSupervisorId = supervisorId;
+        saveToFile();
+        return true;
+    }
+    return false;
+}
+
+bool EventList::updateEventStatus(int eventId, string newStatus) {
+    EventNode* event = getEvent(eventId);
+    if (event) {
+        event->status = newStatus;
+        saveToFile();
+        return true;
+    }
+    return false;
 }

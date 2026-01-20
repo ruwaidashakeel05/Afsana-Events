@@ -1,2 +1,4 @@
-1|1|Baraat|wedding|2025-12-18|14:40|Pearl Continental|Isb|566||pending
-2|1|Party|birthday|2025-12-19|07:37|Wazirabad|Nizamabad|666||pending
+1|5|Corporate Seminar|corporate|2025-12-26|14:00|PC Hotel|PC Hotel, Mall Road, Lahore|100|Professional seminar setup, requires podium, branded banners, projector screen, and minimalist seating arrangement.|catering, photography|confirmed|1
+2|1|Engagement Party|party|2025-12-16|12:00|Gulshan-e-Iqbal Grounds|Gulshan-e-Iqbal Grounds, Karachi|500|Engagement setup with fairy lights, flower walls, stage backdrop, and thematic seating arrangements.|catering, decoration, photography|confirmed|1
+3|1|Music Festival|other|2025-12-27|19:00|F-9 Park|F-9 Park, Islamabad|10000|Festival setup with multiple stages, decorative lighting, banners.|decoration, music|pending|0
+4|7|Baraat|wedding|2025-12-10|12:20|Grand Hotel|sjhhjw|200|wjhkwj|planning|pending|0

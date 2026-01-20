@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include "utils.h"
 using namespace std;
 
 // ==================== CUSTOMER NODE ====================
@@ -64,7 +65,11 @@ public:
     CustomerNode* login(string email, string password);
     CustomerNode* findById(int id);
     bool updateCustomer(int id, string name, string phone, string address);
+    bool deleteCustomer(int id);
     string getCustomerJSON(CustomerNode* customer);
+    string getAllCustomersJSON();
+    
+    CustomerNode* getHead() { return head; }
 
     void saveToFile();
     void loadFromFile();

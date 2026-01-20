@@ -238,16 +238,6 @@
             color: #666;
         }
 
-        /* Notification Badge */
-        .notification-badge {
-            background-color: #dc3545;
-            color: white;
-            padding: 0.2rem 0.5rem;
-            border-radius: 50%;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
         /* Action Buttons */
         .action-btns {
             display: flex;
@@ -308,43 +298,6 @@
         .stat-label {
             font-size: 0.95rem;
             color: #666;
-        }
-
-        /* Reviews */
-        .review-card {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .review-customer {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .review-rating {
-            color: #f39c12;
-            font-size: 1.1rem;
-        }
-
-        .review-content {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 0.5rem;
-        }
-
-        .review-date {
-            font-size: 0.85rem;
-            color: #888;
         }
 
         /* Modal */
@@ -614,140 +567,22 @@
                 <a href="contact.html">Contact Us</a>
             </div>
             <div class="nav-right">
-            <div class="user-info">Staff: <strong>Jalal Khan</strong> (Caterer)</div>
-            <button class="logout-btn" onclick="logout()">Logout</button>
-        </div>
+                <div class="user-info">Staff: <strong id="staffNameDisplay">Loading...</strong> <span id="staffRoleDisplay"></span></div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
         </div>
     </nav>
 
     <!-- Main Container -->
     <div class="container">
-        <!-- Tabs -->
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('tasks')">My Tasks <span class="notification-badge">3</span></button>
-            <button class="tab" onclick="switchTab('notifications')">Notifications <span class="notification-badge">5</span></button>
-            <button class="tab" onclick="switchTab('reviews')">Customer Reviews</button>
-            <button class="tab" onclick="switchTab('analytics')">Performance Analytics</button>
-            <button class="tab" onclick="switchTab('reports')">Reports</button>
-        </div>
 
         <!-- My Tasks Tab -->
         <div id="tasksTab" class="tab-content active">
             <div class="section-header">
                 <h2>Assigned Tasks</h2>
-                <button class="btn-primary" onclick="openNotifySupervisorModal()">Contact Supervisor</button>
             </div>
             <div class="cards-grid" id="tasksGrid">
                 <!-- Tasks will be loaded here -->
-            </div>
-        </div>
-
-        <!-- Notifications Tab -->
-        <div id="notificationsTab" class="tab-content">
-            <div class="section-header">
-                <h2>Notifications from Supervisors</h2>
-                <button class="btn-primary" onclick="markAllAsRead()">Mark All as Read</button>
-            </div>
-            <div id="notificationsContainer">
-                <!-- Notifications will be loaded here -->
-            </div>
-        </div>
-
-        <!-- Reviews Tab -->
-        <div id="reviewsTab" class="tab-content">
-            <div class="section-header">
-                <h2>Customer Reviews About Me</h2>
-            </div>
-            <div id="reviewsContainer">
-                <!-- Reviews will be loaded here -->
-            </div>
-        </div>
-
-        <!-- Analytics Tab -->
-        <div id="analyticsTab" class="tab-content">
-            <div class="section-header">
-                <h2>Performance Analytics</h2>
-                <button class="report-btn" onclick="downloadAnalytics()">Download Report</button>
-            </div>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalTasks">24</div>
-                    <div class="stat-label">Total Tasks</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="completedTasks">18</div>
-                    <div class="stat-label">Completed Tasks</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="avgRating">4.8</div>
-                    <div class="stat-label">Average Rating</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="totalReviews">15</div>
-                    <div class="stat-label">Total Reviews</div>
-                </div>
-            </div>
-
-            <div class="chart-container">
-                <h3 style="margin-bottom: 1rem; color: #333;">Tasks Completion Trend</h3>
-                <div class="chart-placeholder">Chart: Task completion over time</div>
-            </div>
-
-            <div class="chart-container">
-                <h3 style="margin-bottom: 1rem; color: #333;">Rating Distribution</h3>
-                <div class="chart-placeholder">Chart: Rating breakdown (1-5 stars)</div>
-            </div>
-        </div>
-
-        <!-- Reports Tab -->
-        <div id="reportsTab" class="tab-content">
-            <div class="section-header">
-                <h2>Generate Reports</h2>
-            </div>
-
-            <div class="card">
-                <h3 style="margin-bottom: 1rem; color: #333;">Performance Report</h3>
-                <p style="color: #666; margin-bottom: 1rem;">Generate a detailed report of your performance, tasks, and customer feedback.</p>
-                <div style="display: flex; gap: 1rem;">
-                    <div style="flex: 1;">
-                        <label>Report Type</label>
-                        <select id="reportType" style="margin-top: 0.5rem;">
-                            <option value="monthly">Monthly Report</option>
-                            <option value="quarterly">Quarterly Report</option>
-                            <option value="yearly">Yearly Report</option>
-                            <option value="custom">Custom Date Range</option>
-                        </select>
-                    </div>
-                    <div style="flex: 1;">
-                        <label>Format</label>
-                        <select id="reportFormat" style="margin-top: 0.5rem;">
-                            <option value="pdf">PDF</option>
-                            <option value="excel">Excel</option>
-                            <option value="csv">CSV</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn-primary" onclick="generateReport()" style="margin-top: 1rem; width: 100%;">Generate Report</button>
-            </div>
-
-            <div class="cards-grid" style="margin-top: 2rem;">
-                <div class="card">
-                    <h3 style="margin-bottom: 0.5rem; color: #333;">Recent Reports</h3>
-                    <div class="card-info">
-                        <p><strong>Monthly Report - November 2024</strong></p>
-                        <p style="color: #888; font-size: 0.85rem;">Generated on: 2024-12-01</p>
-                        <button class="btn-small btn-view" style="margin-top: 0.5rem;">Download</button>
-                    </div>
-                </div>
-                <div class="card">
-                    <h3 style="margin-bottom: 0.5rem; color: #333;">Quarterly Report - Q3 2024</h3>
-                    <div class="card-info">
-                        <p><strong>July - September 2024</strong></p>
-                        <p style="color: #888; font-size: 0.85rem;">Generated on: 2024-10-05</p>
-                        <button class="btn-small btn-view" style="margin-top: 0.5rem;">Download</button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -841,28 +676,16 @@
     </footer>
 
     <script>
-        // Sample data
-        let tasks = [
-            { id: 1, name: "Setup catering station", event: "Wedding Ceremony", eventDate: "2024-12-15", dueDate: "2024-12-15", status: "pending", description: "Setup main catering station with all equipment", priority: "high" },
-            { id: 2, name: "Food preparation checklist", event: "Birthday Party", eventDate: "2024-12-20", dueDate: "2024-12-19", status: "in-progress", description: "Prepare menu items as per client requirements", priority: "medium" },
-            { id: 3, name: "Final quality check", event: "Corporate Event", eventDate: "2024-12-18", dueDate: "2024-12-18", status: "pending", description: "Ensure all food items meet quality standards", priority: "high" }
-        ];
-
-        let notifications = [
-            { id: 1, subject: "New Task Assigned", message: "You have been assigned a new task for Wedding Ceremony event.", date: "2024-12-02", status: "unread", from: "John Doe" },
-            { id: 2, subject: "Event Date Changed", message: "Birthday Party event has been rescheduled to Dec 20.", date: "2024-12-01", status: "unread", from: "John Doe" },
-            { id: 3, subject: "Important: Quality Standards", message: "Please review the updated quality standards document.", date: "2024-11-30", status: "read", from: "John Doe" },
-            { id: 4, subject: "Team Meeting Tomorrow", message: "Mandatory team meeting at 10 AM in conference room.", date: "2024-11-29", status: "unread", from: "John Doe" },
-            { id: 5, subject: "Great Job!", message: "Excellent work on the last event. Client was very satisfied.", date: "2024-11-28", status: "read", from: "John Doe" }
-        ];
-
-        let reviews = [
-            { id: 1, customer: "Sarah Ahmed", rating: 5, comment: "Excellent food quality and presentation. Very professional service!", date: "2024-11-25", event: "Wedding Ceremony" },
-            { id: 2, customer: "Musaddiq Hussain", rating: 4, comment: "Good service, food was delicious. Slight delay in setup.", date: "2024-11-20", event: "Birthday Party" },
-            { id: 3, customer: "Fatima Noor", rating: 5, comment: "Amazing work! Everything was perfect and on time.", date: "2024-11-18", event: "Corporate Event" }
-        ];
-
+        // Data variables
+        let tasks = [];
+        let supervisors = [];
         let currentTaskId = null;
+
+        // ========== UPDATED: Use X-Session-ID header ==========
+        function getAuthHeaders() {
+            const sessionId = localStorage.getItem('staff_sessionId') || '';
+            return sessionId ? { 'X-Session-ID': sessionId } : {};
+        }
 
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -872,81 +695,95 @@
             document.getElementById(tab + 'Tab').classList.add('active');
 
             if (tab === 'tasks') loadTasks();
-            if (tab === 'notifications') loadNotifications();
-            if (tab === 'reviews') loadReviews();
         }
 
         function loadTasks() {
-            const grid = document.getElementById('tasksGrid');
-            grid.innerHTML = tasks.map(task => `
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">${task.name}</div>
-                    </div>
-                    <div class="card-info">
-                        <p><strong>Event:</strong> ${task.event}</p>
-                        <p><strong>Event Date:</strong> ${task.eventDate}</p>
-                        <p><strong>Due Date:</strong> ${task.dueDate}</p>
-                        <p><strong>Priority:</strong> ${task.priority.toUpperCase()}</p>
-                        <p><strong>Description:</strong> ${task.description}</p>
-                        <span class="status-badge status-${task.status}">${task.status.replace('-', ' ').toUpperCase()}</span>
-                    </div>
-                    <div class="action-btns">
-                        <button class="btn-small btn-view" onclick="viewTask(${task.id})">View Details</button>
-                        ${task.status !== 'completed' ? `<button class="btn-small btn-complete" onclick="completeTask(${task.id})">Mark Complete</button>` : ''}
-                    </div>
-                </div>
-            `).join('');
-        }
+            const staffSessionId = localStorage.getItem('staff_sessionId');
+            if (!staffSessionId) {
+                alert('Staff authentication required. Please login.');
+                window.location.href = 'login.html';
+                return;
+            }
 
-        function loadNotifications() {
-            const container = document.getElementById('notificationsContainer');
-            container.innerHTML = notifications.map(notif => `
-                <div class="card">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-title">${notif.subject}</div>
-                            <div style="font-size: 0.85rem; color: #888;">From: ${notif.from}</div>
-                        </div>
-                        <span class="status-badge status-${notif.status}">${notif.status.toUpperCase()}</span>
-                    </div>
-                    <div class="card-info">
-                        <p>${notif.message}</p>
-                        <p style="color: #888; font-size: 0.85rem; margin-top: 0.5rem;">${notif.date}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
+            // Fetch supervisors first
+            fetch('/api/supervisors', {
+                headers: getAuthHeaders(),
+                credentials: 'include'  // ADDED
+            })
+            .then(response => response.json())
+            .then(supervisorsList => {
+                supervisors = Array.isArray(supervisorsList) ? supervisorsList : [];
+                
+                // Then fetch tasks
+                fetch('/api/tasks', {
+                    headers: getAuthHeaders(),
+                    credentials: 'include'  // ADDED
+                })
+                .then(response => response.json())
+                .then(tasksList => {
+                    tasks = Array.isArray(tasksList) ? tasksList : [];
+                    const grid = document.getElementById('tasksGrid');
+                    
+                    if (tasks.length === 0) {
+                        grid.innerHTML = '<div class="card"><p style="text-align: center; color: #888;">No tasks assigned yet</p></div>';
+                        return;
+                    }
 
-        function loadReviews() {
-            const container = document.getElementById('reviewsContainer');
-            container.innerHTML = reviews.map(review => `
-                <div class="review-card">
-                    <div class="review-header">
-                        <div>
-                            <div class="review-customer">${review.customer}</div>
-                            <div style="font-size: 0.85rem; color: #888;">${review.event}</div>
+                    grid.innerHTML = tasks.map(task => {
+                        const supervisor = supervisors.find(s => s.id === task.supervisorId);
+                        const supervisorName = supervisor ? supervisor.name : 'N/A';
+                        const supervisorPhone = supervisor ? supervisor.phone : 'N/A';
+                        return `
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">${task.description || 'Task ' + task.id}</div>
+                                <span class="status-badge status-${task.status}">${task.status ? task.status.replace('-', ' ').toUpperCase() : 'N/A'}</span>
+                            </div>
+                            <div class="card-info">
+                                <p><strong>Task ID:</strong> ${task.id || 'N/A'}</p>
+                                <p><strong>Description:</strong> ${task.taskDetails || 'N/A'}</p>
+                                <p><strong>Location:</strong> ${task.location || 'N/A'}</p>
+                                <p><strong>Due Date:</strong> ${task.dueDate || 'N/A'}</p>
+                                <p><strong>Created Date:</strong> ${task.createdDate || 'N/A'}</p>
+                                <p><strong>Assigned by Supervisor:</strong> ${supervisorName}</p>
+                                <p><strong>Supervisor Contact:</strong> ${supervisorPhone}</p>
+                            </div>
+                            <div class="action-btns">
+                                <button class="btn-small btn-view" onclick="viewTask(${task.id})">View Details</button>
+                                ${task.status !== 'completed' ? `<button class="btn-small btn-complete" onclick="completeTask(${task.id})">Mark Complete</button>` : ''}
+                            </div>
                         </div>
-                        <div class="review-rating">${'⭐'.repeat(review.rating)}</div>
-                    </div>
-                    <div class="review-content">${review.comment}</div>
-                    <div class="review-date">${review.date}</div>
-                </div>
-            `).join('');
+                    `}).join('');
+                })
+                .catch(error => {
+                    console.error('Error loading tasks:', error);
+                    document.getElementById('tasksGrid').innerHTML = '<div class="card"><p>Error loading tasks</p></div>';
+                });
+            })
+            .catch(error => {
+                console.error('Error loading supervisors:', error);
+                document.getElementById('tasksGrid').innerHTML = '<div class="card"><p>Error loading task data</p></div>';
+            });
         }
 
         function viewTask(taskId) {
             const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+            
             currentTaskId = taskId;
+            const supervisor = supervisors.find(s => s.id === task.supervisorId);
+            const supervisorName = supervisor ? supervisor.name : 'N/A';
+            
             document.getElementById('taskDetails').innerHTML = `
                 <div class="card-info">
-                    <p><strong>Task:</strong> ${task.name}</p>
-                    <p><strong>Event:</strong> ${task.event}</p>
-                    <p><strong>Event Date:</strong> ${task.eventDate}</p>
-                    <p><strong>Due Date:</strong> ${task.dueDate}</p>
-                    <p><strong>Priority:</strong> ${task.priority.toUpperCase()}</p>
-                    <p><strong>Status:</strong> ${task.status.replace('-', ' ').toUpperCase()}</p>
+                    <p><strong>Task ID:</strong> ${task.id}</p>
                     <p><strong>Description:</strong> ${task.description}</p>
+                    <p><strong>Details:</strong> ${task.taskDetails || 'N/A'}</p>
+                    <p><strong>Location:</strong> ${task.location}</p>
+                    <p><strong>Due Date:</strong> ${task.dueDate}</p>
+                    <p><strong>Created:</strong> ${task.createdDate || 'N/A'}</p>
+                    <p><strong>Status:</strong> ${task.status ? task.status.replace('-', ' ').toUpperCase() : 'N/A'}</p>
+                    <p><strong>Assigned by:</strong> ${supervisorName}</p>
                 </div>
             `;
             document.getElementById('taskModal').classList.add('active');
@@ -954,14 +791,28 @@
 
         function completeTask(taskId) {
             if (confirm('Mark this task as complete?')) {
-                const task = tasks.find(t => t.id === taskId);
-                task.status = 'completed';
-                
-                console.log('Complete Task:', { taskId, status: 'completed' });
-                // API call: PUT /api/tasks/{id}
-                
-                loadTasks();
-                alert('Task marked as complete!');
+                fetch(`/api/supervisor/task/${taskId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...getAuthHeaders()
+                    },
+                    body: JSON.stringify({ status: 'completed' }),
+                    credentials: 'include'  // ADDED
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Task marked as complete!');
+                        loadTasks();
+                    } else {
+                        alert('Error: ' + (data.message || 'Failed to update task'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error marking task as complete');
+                });
             }
         }
 
@@ -972,49 +823,24 @@
             }
         }
 
-        function markAllAsRead() {
-            notifications.forEach(n => n.status = 'read');
-            
-            console.log('Mark all notifications as read');
-            // API call: PUT /api/notifications/read-all
-            
-            loadNotifications();
-            alert('All notifications marked as read!');
-        }
-
-        function openNotifySupervisorModal() {
-            document.getElementById('supervisorModal').classList.add('active');
-        }
-
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
         }
 
-        function generateReport() {
-            const reportType = document.getElementById('reportType').value;
-            const reportFormat = document.getElementById('reportFormat').value;
-            
-            const reportData = {
-                type: reportType,
-                format: reportFormat,
-                generatedDate: new Date().toISOString()
-            };
-
-            console.log('Generate Report:', reportData);
-            // API call: POST /api/reports/generate
-            
-            alert(`${reportType.charAt(0).toUpperCase() + reportType.slice(1)} report in ${reportFormat.toUpperCase()} format will be generated and downloaded.`);
-        }
-
-        function downloadAnalytics() {
-            console.log('Download Analytics Report');
-            // API call: GET /api/analytics/download
-            alert('Analytics report will be downloaded as PDF.');
-        }
-
+        // ========== UPDATED: Logout function ==========
         function logout() {
             if (confirm('Are you sure you want to logout?')) {
-                window.location.href = 'login.html';
+                fetch('http://localhost:8080/api/auth/logout', {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    credentials: 'include'
+                }).finally(() => {
+                    localStorage.removeItem('staff_sessionId');
+                    localStorage.removeItem('staff_name');
+                    localStorage.removeItem('staff_id');
+                    localStorage.removeItem('staff_role');
+                    window.location.href = 'login.html';
+                });
             }
         }
 
@@ -1030,15 +856,34 @@
             };
 
             console.log('Contact Supervisor:', messageData);
-            // API call: POST /api/supervisor/contact
-
+            // Note: This feature would need a backend endpoint
+            
             closeModal('supervisorModal');
-            alert('Message sent to supervisor successfully!');
+            alert('Message feature not fully implemented. Please contact your supervisor directly.');
             this.reset();
         });
 
-        // Initial load
-        loadTasks();
+        // ========== UPDATED: Initial load ==========
+        function initializePage() {
+            const staffSessionId = localStorage.getItem('staff_sessionId');
+            if (!staffSessionId) {
+                alert('Staff authentication required. Please login.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Display staff name and role
+            const staffName = localStorage.getItem('staff_name') || 'Staff';
+            const staffRole = localStorage.getItem('staff_role') || '';
+            document.getElementById('staffNameDisplay').textContent = staffName;
+            if (staffRole) {
+                document.getElementById('staffRoleDisplay').textContent = `(${staffRole})`;
+            }
+            
+            loadTasks();
+        }
+
+        initializePage();
     </script>
 </body>
 </html>

@@ -68,17 +68,21 @@ void TaskQueue::loadFromFile() {
     string name, eventName, assignedTo, dueDate, description, status;
 
     while (getline(file, line)) {
-        stringstream ss(line);
-        getline(ss, line, ','); id = stoi(line);
-        getline(ss, name, ',');
-        getline(ss, eventName, ',');
-        getline(ss, assignedTo, ',');
-        getline(ss, dueDate, ',');
-        getline(ss, description, ',');
-        getline(ss, status, ',');
-        assignTask(id, name, eventName, assignedTo, dueDate, description);
-        TaskNode* t = getTask(id);
-        if (t) t->status = status;
+        try {
+            stringstream ss(line);
+            getline(ss, line, ','); id = stoi(line);
+            getline(ss, name, ',');
+            getline(ss, eventName, ',');
+            getline(ss, assignedTo, ',');
+            getline(ss, dueDate, ',');
+            getline(ss, description, ',');
+            getline(ss, status, ',');
+            assignTask(id, name, eventName, assignedTo, dueDate, description);
+            TaskNode* t = getTask(id);
+            if (t) t->status = status;
+        } catch (...) {
+            continue;
+        }
     }
     file.close();
 }

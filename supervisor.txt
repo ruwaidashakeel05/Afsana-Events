@@ -1,0 +1,3 @@
+4|Tariq Ahmad|tariqahmad@afsanayevents.com|tariqahmad|03445678901|Event Planner|Johar Town, Lahore
+2|Shahzaib Malik|shahzaibmalik@afsanayevents.com|shahzaibmalik|03219876541|Event Planner|F-8, Islamabad
+1|Mariam Javed|mariamjaved@afsanayevents.com|mariamjaved|03211233445|Event Manager|Gulberg, Lahore
